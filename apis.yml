@@ -28,6 +28,20 @@ common:
     url: https://www.metaplane.dev
   - type: Documentation
     url: https://docs.metaplane.dev
+  - type: Integrations
+    url: https://www.metaplane.dev/integrations
+integrations:
+  - name: BigQuery
+  - name: Redshift
+  - name: Snowflake
+  - name: Airbyte
+  - name: Fivetran
+  - name: dbt Cloud
+  - name: MySQL
+  - name: Census
+  - name: Jira
+  - name: Airflow
+  - name: Looker
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
