@@ -24,6 +24,10 @@ apis:
       - type: Documentation
         url: https://docs.metaplane.dev
 common:
+  - type: GitHubOrganization
+    url: https://github.com/metaplane
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/metaplane
   - type: Website
     url: https://www.metaplane.dev
   - type: Documentation
