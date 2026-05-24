@@ -1,0 +1,219 @@
+openapi: 3.1.0
+info:
+  title: Metaplane API
+  description: |
+    Metaplane is a data observability platform providing automated anomaly
+    detection and data quality monitoring. The REST API exposes operations
+    over connections, monitors, monitor evaluations, datapoints, and tags.
+  version: "1.0"
+  contact:
+    name: Metaplane
+    url: https://docs.metaplane.dev/
+servers:
+  - url: https://api.metaplane.dev
+    description: Production API
+security:
+  - apiKeyAuth: []
+tags:
+  - name: Connections
+  - name: Monitors
+  - name: Datapoints
+  - name: Tags
+paths:
+  /getallconnections:
+    get:
+      tags: [Connections]
+      summary: List all connections
+      responses:
+        '200': { description: Connection list }
+  /getconnectionstatus:
+    get:
+      tags: [Connections]
+      summary: Get current sync status of a connection
+      parameters:
+        - in: query
+          name: connectionId
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Connection status }
+  /syncconnection:
+    post:
+      tags: [Connections]
+      summary: Initiate connection re-sync
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                connectionId: { type: string }
+      responses:
+        '202': { description: Sync initiated }
+  /updateprivatekey:
+    post:
+      tags: [Connections]
+      summary: Update connection private key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                connectionId: { type: string }
+                privateKey: { type: string }
+      responses:
+        '200': { description: Updated }
+  /bulkgettablemonitors:
+    post:
+      tags: [Monitors]
+      summary: Retrieve monitors on up to 200 table paths
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tablePaths:
+                  type: array
+                  items: { type: string }
+                  maxItems: 200
+      responses:
+        '200': { description: Monitors per table }
+  /createmonitor:
+    post:
+      tags: [Monitors]
+      summary: Add a new monitor to a database entity
+      responses:
+        '201': { description: Monitor created }
+  /getallmonitorsforsource:
+    get:
+      tags: [Monitors]
+      summary: List monitors for a specific connection
+      parameters:
+        - in: query
+          name: connectionId
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Monitors }
+  /getevaluationhistory:
+    post:
+      tags: [Monitors]
+      summary: Retrieve historical monitor evaluations
+      responses:
+        '200': { description: Evaluation history }
+  /getmonitor:
+    get:
+      tags: [Monitors]
+      summary: Fetch existing monitor details
+      parameters:
+        - in: query
+          name: monitorId
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Monitor details }
+  /getmonitors:
+    get:
+      tags: [Monitors]
+      summary: Get monitors for a database entity
+      responses:
+        '200': { description: Monitors }
+  /getmonitorstatus2:
+    get:
+      tags: [Monitors]
+      summary: Get latest monitor status
+      parameters:
+        - in: query
+          name: monitorId
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Monitor status }
+  /importhistoricdataformonitor:
+    post:
+      tags: [Monitors]
+      summary: Import historical monitor data
+      responses:
+        '202': { description: Import accepted }
+  /ingestdatapoint:
+    post:
+      tags: [Datapoints]
+      summary: Submit a datapoint to a monitor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                monitorId: { type: string }
+                value: { type: number }
+                timestamp: { type: string, format: date-time }
+      responses:
+        '202': { description: Datapoint ingested }
+  /runmonitors:
+    post:
+      tags: [Monitors]
+      summary: Enqueue monitors for immediate execution
+      responses:
+        '202': { description: Run scheduled }
+  /updatemonitor:
+    post:
+      tags: [Monitors]
+      summary: Modify an existing monitor configuration
+      responses:
+        '200': { description: Monitor updated }
+  /fetchtagdefinitions:
+    post:
+      tags: [Tags]
+      summary: Retrieve tag definitions
+      responses:
+        '200': { description: Tag definitions }
+  /fetchtaggedmonitors:
+    post:
+      tags: [Tags]
+      summary: Get monitors associated with a tag
+      responses:
+        '200': { description: Tagged monitors }
+  /fetchtaggedobjects:
+    post:
+      tags: [Tags]
+      summary: Retrieve all tagged objects
+      responses:
+        '200': { description: Tagged objects }
+  /removemonitortags:
+    post:
+      tags: [Tags]
+      summary: Remove tags from a monitor
+      responses:
+        '200': { description: Tags removed }
+  /removetabletags:
+    post:
+      tags: [Tags]
+      summary: Remove tags from a table
+      responses:
+        '200': { description: Tags removed }
+  /tagmonitors:
+    post:
+      tags: [Tags]
+      summary: Apply a tag to multiple monitors
+      responses:
+        '200': { description: Tagged }
+  /tagtables:
+    post:
+      tags: [Tags]
+      summary: Apply a tag to multiple tables
+      responses:
+        '200': { description: Tagged }
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Metaplane API key
