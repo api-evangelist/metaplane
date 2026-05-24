@@ -34,6 +34,8 @@ common:
     url: https://docs.metaplane.dev
   - type: Integrations
     url: https://www.metaplane.dev/integrations
+  - type: LLMsTxt
+    url: https://docs.metaplane.dev/llms.txt
 integrations:
   - name: BigQuery
   - name: Redshift
