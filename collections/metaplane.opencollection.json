@@ -1,0 +1,336 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Metaplane API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Connections",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all connections",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.metaplane.dev/getallconnections"
+          },
+          "docs": "List all connections"
+        },
+        {
+          "info": {
+            "name": "Get current sync status of a connection",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.metaplane.dev/getconnectionstatus",
+            "params": [
+              {
+                "name": "connectionId",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get current sync status of a connection"
+        },
+        {
+          "info": {
+            "name": "Initiate connection re-sync",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/syncconnection",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiate connection re-sync"
+        },
+        {
+          "info": {
+            "name": "Update connection private key",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/updateprivatekey",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update connection private key"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Monitors",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve monitors on up to 200 table paths",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/bulkgettablemonitors",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieve monitors on up to 200 table paths"
+        },
+        {
+          "info": {
+            "name": "Add a new monitor to a database entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/createmonitor"
+          },
+          "docs": "Add a new monitor to a database entity"
+        },
+        {
+          "info": {
+            "name": "List monitors for a specific connection",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.metaplane.dev/getallmonitorsforsource",
+            "params": [
+              {
+                "name": "connectionId",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List monitors for a specific connection"
+        },
+        {
+          "info": {
+            "name": "Retrieve historical monitor evaluations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/getevaluationhistory"
+          },
+          "docs": "Retrieve historical monitor evaluations"
+        },
+        {
+          "info": {
+            "name": "Fetch existing monitor details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.metaplane.dev/getmonitor",
+            "params": [
+              {
+                "name": "monitorId",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Fetch existing monitor details"
+        },
+        {
+          "info": {
+            "name": "Get monitors for a database entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.metaplane.dev/getmonitors"
+          },
+          "docs": "Get monitors for a database entity"
+        },
+        {
+          "info": {
+            "name": "Get latest monitor status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.metaplane.dev/getmonitorstatus2",
+            "params": [
+              {
+                "name": "monitorId",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get latest monitor status"
+        },
+        {
+          "info": {
+            "name": "Import historical monitor data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/importhistoricdataformonitor"
+          },
+          "docs": "Import historical monitor data"
+        },
+        {
+          "info": {
+            "name": "Enqueue monitors for immediate execution",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/runmonitors"
+          },
+          "docs": "Enqueue monitors for immediate execution"
+        },
+        {
+          "info": {
+            "name": "Modify an existing monitor configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/updatemonitor"
+          },
+          "docs": "Modify an existing monitor configuration"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Datapoints",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Submit a datapoint to a monitor",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/ingestdatapoint",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a datapoint to a monitor"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Tags",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve tag definitions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/fetchtagdefinitions"
+          },
+          "docs": "Retrieve tag definitions"
+        },
+        {
+          "info": {
+            "name": "Get monitors associated with a tag",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/fetchtaggedmonitors"
+          },
+          "docs": "Get monitors associated with a tag"
+        },
+        {
+          "info": {
+            "name": "Retrieve all tagged objects",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/fetchtaggedobjects"
+          },
+          "docs": "Retrieve all tagged objects"
+        },
+        {
+          "info": {
+            "name": "Remove tags from a monitor",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/removemonitortags"
+          },
+          "docs": "Remove tags from a monitor"
+        },
+        {
+          "info": {
+            "name": "Remove tags from a table",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/removetabletags"
+          },
+          "docs": "Remove tags from a table"
+        },
+        {
+          "info": {
+            "name": "Apply a tag to multiple monitors",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/tagmonitors"
+          },
+          "docs": "Apply a tag to multiple monitors"
+        },
+        {
+          "info": {
+            "name": "Apply a tag to multiple tables",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/tagtables"
+          },
+          "docs": "Apply a tag to multiple tables"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
