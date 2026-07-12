@@ -24,6 +24,12 @@ apis:
       - type: Documentation
         url: https://docs.metaplane.dev
 common:
+  - type: TrustCenter
+    url: security/metaplane-trust-center.yml
+  - type: DomainSecurity
+    url: security/metaplane-domain-security.yml
+  - type: Authentication
+    url: authentication/metaplane-authentication.yml
   - type: GitHubOrganization
     url: https://github.com/metaplane
   - type: LinkedIn
@@ -36,6 +42,8 @@ common:
     url: https://www.metaplane.dev/integrations
   - type: LlmsText
     url: https://docs.metaplane.dev/llms.txt
+  - url: https://www.metaplane.dev/blog/rss.xml
+    type: Blog
 integrations:
   - name: BigQuery
   - name: Redshift
