@@ -24,6 +24,8 @@ apis:
       - type: Documentation
         url: https://docs.metaplane.dev
 common:
+  - type: AgenticAccess
+    url: agentic-access/metaplane-agentic-access.yml
   - type: TrustCenter
     url: security/metaplane-trust-center.yml
   - type: DomainSecurity
