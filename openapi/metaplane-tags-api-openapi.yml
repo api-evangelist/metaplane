@@ -1,0 +1,85 @@
+openapi: 3.1.0
+info:
+  title: Metaplane Connections Tags API
+  description: 'Metaplane is a data observability platform providing automated anomaly
+
+    detection and data quality monitoring. The REST API exposes operations
+
+    over connections, monitors, monitor evaluations, datapoints, and tags.
+
+    '
+  version: '1.0'
+  contact:
+    name: Metaplane
+    url: https://docs.metaplane.dev/
+servers:
+- url: https://api.metaplane.dev
+  description: Production API
+security:
+- apiKeyAuth: []
+tags:
+- name: Tags
+paths:
+  /fetchtagdefinitions:
+    post:
+      tags:
+      - Tags
+      summary: Retrieve tag definitions
+      responses:
+        '200':
+          description: Tag definitions
+  /fetchtaggedmonitors:
+    post:
+      tags:
+      - Tags
+      summary: Get monitors associated with a tag
+      responses:
+        '200':
+          description: Tagged monitors
+  /fetchtaggedobjects:
+    post:
+      tags:
+      - Tags
+      summary: Retrieve all tagged objects
+      responses:
+        '200':
+          description: Tagged objects
+  /removemonitortags:
+    post:
+      tags:
+      - Tags
+      summary: Remove tags from a monitor
+      responses:
+        '200':
+          description: Tags removed
+  /removetabletags:
+    post:
+      tags:
+      - Tags
+      summary: Remove tags from a table
+      responses:
+        '200':
+          description: Tags removed
+  /tagmonitors:
+    post:
+      tags:
+      - Tags
+      summary: Apply a tag to multiple monitors
+      responses:
+        '200':
+          description: Tagged
+  /tagtables:
+    post:
+      tags:
+      - Tags
+      summary: Apply a tag to multiple tables
+      responses:
+        '200':
+          description: Tagged
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Metaplane API key

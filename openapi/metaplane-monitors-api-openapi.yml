@@ -1,0 +1,139 @@
+openapi: 3.1.0
+info:
+  title: Metaplane Connections Monitors API
+  description: 'Metaplane is a data observability platform providing automated anomaly
+
+    detection and data quality monitoring. The REST API exposes operations
+
+    over connections, monitors, monitor evaluations, datapoints, and tags.
+
+    '
+  version: '1.0'
+  contact:
+    name: Metaplane
+    url: https://docs.metaplane.dev/
+servers:
+- url: https://api.metaplane.dev
+  description: Production API
+security:
+- apiKeyAuth: []
+tags:
+- name: Monitors
+paths:
+  /bulkgettablemonitors:
+    post:
+      tags:
+      - Monitors
+      summary: Retrieve monitors on up to 200 table paths
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tablePaths:
+                  type: array
+                  items:
+                    type: string
+                  maxItems: 200
+      responses:
+        '200':
+          description: Monitors per table
+  /createmonitor:
+    post:
+      tags:
+      - Monitors
+      summary: Add a new monitor to a database entity
+      responses:
+        '201':
+          description: Monitor created
+  /getallmonitorsforsource:
+    get:
+      tags:
+      - Monitors
+      summary: List monitors for a specific connection
+      parameters:
+      - in: query
+        name: connectionId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Monitors
+  /getevaluationhistory:
+    post:
+      tags:
+      - Monitors
+      summary: Retrieve historical monitor evaluations
+      responses:
+        '200':
+          description: Evaluation history
+  /getmonitor:
+    get:
+      tags:
+      - Monitors
+      summary: Fetch existing monitor details
+      parameters:
+      - in: query
+        name: monitorId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Monitor details
+  /getmonitors:
+    get:
+      tags:
+      - Monitors
+      summary: Get monitors for a database entity
+      responses:
+        '200':
+          description: Monitors
+  /getmonitorstatus2:
+    get:
+      tags:
+      - Monitors
+      summary: Get latest monitor status
+      parameters:
+      - in: query
+        name: monitorId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Monitor status
+  /importhistoricdataformonitor:
+    post:
+      tags:
+      - Monitors
+      summary: Import historical monitor data
+      responses:
+        '202':
+          description: Import accepted
+  /runmonitors:
+    post:
+      tags:
+      - Monitors
+      summary: Enqueue monitors for immediate execution
+      responses:
+        '202':
+          description: Run scheduled
+  /updatemonitor:
+    post:
+      tags:
+      - Monitors
+      summary: Modify an existing monitor configuration
+      responses:
+        '200':
+          description: Monitor updated
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Metaplane API key

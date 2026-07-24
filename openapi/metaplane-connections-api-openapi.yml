@@ -1,0 +1,87 @@
+openapi: 3.1.0
+info:
+  title: Metaplane Connections API
+  description: 'Metaplane is a data observability platform providing automated anomaly
+
+    detection and data quality monitoring. The REST API exposes operations
+
+    over connections, monitors, monitor evaluations, datapoints, and tags.
+
+    '
+  version: '1.0'
+  contact:
+    name: Metaplane
+    url: https://docs.metaplane.dev/
+servers:
+- url: https://api.metaplane.dev
+  description: Production API
+security:
+- apiKeyAuth: []
+tags:
+- name: Connections
+paths:
+  /getallconnections:
+    get:
+      tags:
+      - Connections
+      summary: List all connections
+      responses:
+        '200':
+          description: Connection list
+  /getconnectionstatus:
+    get:
+      tags:
+      - Connections
+      summary: Get current sync status of a connection
+      parameters:
+      - in: query
+        name: connectionId
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Connection status
+  /syncconnection:
+    post:
+      tags:
+      - Connections
+      summary: Initiate connection re-sync
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                connectionId:
+                  type: string
+      responses:
+        '202':
+          description: Sync initiated
+  /updateprivatekey:
+    post:
+      tags:
+      - Connections
+      summary: Update connection private key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                connectionId:
+                  type: string
+                privateKey:
+                  type: string
+      responses:
+        '200':
+          description: Updated
+components:
+  securitySchemes:
+    apiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Metaplane API key
