@@ -3,7 +3,20 @@ name: Metaplane
 description: >-
   Metaplane is a data observability platform providing automated anomaly detection and data quality monitoring.
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/metaplane.png
 tags:
   - AIOps
   - Data Observability
@@ -13,16 +26,53 @@ created: '2026-03-27'
 modified: '2026-03-27'
 specificationVersion: '0.19'
 apis:
-  - aid: metaplane:metaplane
-    name: Metaplane
-    description: >-
-      Metaplane is a data observability platform providing automated anomaly detection and data quality monitoring.
-    humanURL: https://www.metaplane.dev
-    tags:
-      - AIOps
-    properties:
-      - type: Documentation
-        url: https://docs.metaplane.dev
+- aid: metaplane:metaplane
+  name: Metaplane
+  description: >-
+    Metaplane is a data observability platform providing automated anomaly detection and data quality
+    monitoring.
+  humanURL: https://www.metaplane.dev
+  tags:
+  - AIOps
+  properties:
+  - type: Documentation
+    url: https://docs.metaplane.dev
+- aid: metaplane:metaplane-connections-api
+  name: Metaplane Connections API
+  description: The Connections API from Metaplane — 4 operation(s) for connections.
+  humanURL: https://www.metaplane.dev
+  tags:
+  - Connections
+  properties:
+  - type: OpenAPI
+    url: openapi/metaplane-connections-api-openapi.yml
+- aid: metaplane:metaplane-datapoints-api
+  name: Metaplane Datapoints API
+  description: The Datapoints API from Metaplane — 1 operation(s) for datapoints.
+  humanURL: https://www.metaplane.dev
+  tags:
+  - Datapoints
+  properties:
+  - type: OpenAPI
+    url: openapi/metaplane-datapoints-api-openapi.yml
+- aid: metaplane:metaplane-monitors-api
+  name: Metaplane Monitors API
+  description: The Monitors API from Metaplane — 10 operation(s) for monitors.
+  humanURL: https://www.metaplane.dev
+  tags:
+  - Monitors
+  properties:
+  - type: OpenAPI
+    url: openapi/metaplane-monitors-api-openapi.yml
+- aid: metaplane:metaplane-tags-api
+  name: Metaplane Tags API
+  description: The Tags API from Metaplane — 7 operation(s) for tags.
+  humanURL: https://www.metaplane.dev
+  tags:
+  - Tags
+  properties:
+  - type: OpenAPI
+    url: openapi/metaplane-tags-api-openapi.yml
 common:
   - type: AgenticAccess
     url: agentic-access/metaplane-agentic-access.yml
