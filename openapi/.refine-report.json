@@ -1,0 +1,20 @@
+{
+  "provider": "metaplane",
+  "sources": [
+    "metaplane-connections-api-openapi.yml",
+    "metaplane-datapoints-api-openapi.yml",
+    "metaplane-monitors-api-openapi.yml",
+    "metaplane-tags-api-openapi.yml"
+  ],
+  "outputs": [
+    "metaplane-connections-api-openapi.yml",
+    "metaplane-datapoints-api-openapi.yml",
+    "metaplane-monitors-api-openapi.yml",
+    "metaplane-tags-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
