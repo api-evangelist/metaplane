@@ -1,0 +1,85 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Metaplane Connections API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Connections",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all connections",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.metaplane.dev/getallconnections"
+          },
+          "docs": "List all connections"
+        },
+        {
+          "info": {
+            "name": "Get current sync status of a connection",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.metaplane.dev/getconnectionstatus",
+            "params": [
+              {
+                "name": "connectionId",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get current sync status of a connection"
+        },
+        {
+          "info": {
+            "name": "Initiate connection re-sync",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/syncconnection",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Initiate connection re-sync"
+        },
+        {
+          "info": {
+            "name": "Update connection private key",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/updateprivatekey",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update connection private key"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

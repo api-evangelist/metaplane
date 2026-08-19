@@ -1,0 +1,41 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Metaplane Connections Datapoints API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Datapoints",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Submit a datapoint to a monitor",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/ingestdatapoint",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a datapoint to a monitor"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,89 @@
+# Metaplane Documentation
+
+> Metaplane is a data observability platform that helps data teams know when things break, what went wrong, and how to fix it.
+
+## Guides
+- [Getting started](https://docs.metaplane.dev/docs/overview.md): You can add observability to your data stack in less than 10 minutes. To get started, you only have to do three things: add a source, integrate Slack, and add monitors.
+- [Setting up Metaplane for the first time](https://docs.metaplane.dev/docs/setting-up-metaplane-for-the-first-time.md)
+- [Proactive Incident Prevention](https://docs.metaplane.dev/docs/proactive-incident-prevention.md)
+- [Setting up Metaplane (Advanced)](https://docs.metaplane.dev/docs/setting-up-metaplane-advanced.md)
+- [Tips for Managing your Metaplane Account](https://docs.metaplane.dev/docs/tips-for-managing-your-metaplane-account.md)
+- [Snowflake](https://docs.metaplane.dev/docs/snowflake.md): Snowflake is a multi-cloud data cloud optimized for analytics workloads and requiring little maintenance. Metaplane monitors the data within your Snowflake instance so you can be the first to know of potential data bugs.
+- [Redshift](https://docs.metaplane.dev/docs/redshift.md): Redshift is a cloud data warehouse from Amazon Web Services optimized for analytics workloads. Metaplane monitors the data within your Redshift instance so you can be the first to know if potential data bugs. Metaplane supports both Redshift and Redshift Serverless.
+- [BigQuery](https://docs.metaplane.dev/docs/bigquery.md): BigQuery is a data warehouse from Google Cloud optimized for analytics workloads. Metaplane monitors the data within your BigQuery instance so you can be the first to know if potential data bugs.
+- [ClickHouse](https://docs.metaplane.dev/docs/clickhouse.md): ClickHouse is an open-source column-oriented database management system designed to handle high-volume data workloads and provide fast query performance. Metaplane monitors the data within your ClickHouse instance so you can be the first to know of potential data bugs.
+- [Databricks](https://docs.metaplane.dev/docs/databricks.md): Databricks is a data lakehouse that unifies the best of data warehouses and data lakes in one simple platform to handle all your data, analytics and AI use cases. It’s built on an open and reliable data foundation that efficiently handles all data types and applies one common security and governance approach across all of your data and cloud platforms.
+- [Snowflake (Native Application)](https://docs.metaplane.dev/docs/snowflake-native-application.md): Set up best-in-class monitoring on your Snowflake account without giving out any Snowflake credentials or allowing sensitive data leave the warehouse.
+- [Amazon S3](https://docs.metaplane.dev/docs/s3.md): Set up monitoring of your raw files stored in AWS S3 including S3 tables using Apache Iceberg
+- [SAP S/4HANA](https://docs.metaplane.dev/docs/sap-s4hana.md): Send numeric KPIs from SAP S/4HANA (via its REST/OData APIs) into Metaplane so Metaplane can model trends and alert on anomalies for custom monitors.
+- [MySQL](https://docs.metaplane.dev/docs/mysql.md): MySQL is an open-source relational database management system (RDBMS).
+- [Azure Synapse](https://docs.metaplane.dev/docs/azure-synapse.md)
+- [Segment](https://docs.metaplane.dev/docs/segment.md): Twilio Segment is a Customer Data Platform (CDP) that consolidates, unifies, and provides insights into user data across various sources. The Segment platform enables you to move customer data to and from your cloud data platforms.
+- [Airbyte](https://docs.metaplane.dev/docs/airbyte.md): Airbyte is a data movement platform with an expansive catalog of connectors, allowing users to seamlessly sync data between systems.
+- [Census](https://docs.metaplane.dev/docs/census.md): Census is a Data Activation and Reverse ETL platform that delivers trusted data and audiences from your data warehouse into 150+ operational tools.
+- [Hightouch](https://docs.metaplane.dev/docs/hightouch.md): Hightouch syncs your data to CRM, e-mail, advertising tools and more. No engineering, manual work, or costly CDP required.
+- [dbt Cloud](https://docs.metaplane.dev/docs/dbt.md): dbt is a data transformation tool that enables data analysts and engineers to transform, test and document data in the cloud data warehouse.
+- [dbt Core](https://docs.metaplane.dev/docs/dbt-core.md)
+- [Airflow](https://docs.metaplane.dev/docs/airflow.md): Apache Airflow™ is an open-source platform for developing, scheduling, and monitoring batch-oriented workflows. Airflow’s extensible Python framework enables you to build workflows connecting with virtually any technology.
+- [Looker](https://docs.metaplane.dev/docs/looker.md): Looker is an enterprise platform for BI, data applications, and embedded analytics that helps you explore and share insights in real time.
+- [LookML Git Integration](https://docs.metaplane.dev/docs/lookml-git-integration.md): Connect your LookML Git repositories to Metaplane to supercharge your lineage and insights.
+- [Tableau](https://docs.metaplane.dev/docs/tableau.md): Tableau is a visual analytics platform transforming the way we use data to solve problems—empowering people and organizations to make the most of their data.
+- [Sigma](https://docs.metaplane.dev/docs/sigma.md): Sigma is the only BI analytics tool purpose-built for your cloud data warehouse. Uniquely scalable, with an experience you already know: the spreadsheet.
+- [Hex](https://docs.metaplane.dev/docs/hex.md)
+- [Slack](https://docs.metaplane.dev/docs/slack.md): Slack is a messaging app for business that connects people to the information they need. By bringing people together to work as one unified team, Slack transforms the way organizations communicate.
+- [Microsoft Teams](https://docs.metaplane.dev/docs/microsoft-teams.md)
+- [Alert routing](https://docs.metaplane.dev/docs/alert-routing.md)
+- [Tags](https://docs.metaplane.dev/docs/tags.md): Organize data assets and prioritize incidents
+- [Alert mentions](https://docs.metaplane.dev/docs/alert-mentions.md): You can configure alerts to mention monitor owners by associating their Metaplane users with corresponding IDs from your Notification ID.
+- [Webhooks](https://docs.metaplane.dev/docs/webhooks.md)
+- [Google Chat Cloud Function](https://docs.metaplane.dev/docs/google-chat-cloud-function.md)
+- [dbt node level alerting](https://docs.metaplane.dev/docs/dbt-node-level-alerting.md)
+- [Metaplane CLI](https://docs.metaplane.dev/docs/metaplane-cli.md): Free CLI providing miscellaneous tools for working with data stacks.
+- [Creating monitors](https://docs.metaplane.dev/docs/test-fundamentals.md)
+- [Configuring monitors](https://docs.metaplane.dev/docs/configuring-monitors.md): How to schedule monitors, add manual thresholds, and filter by rolling time windows.
+- [Monitor types](https://docs.metaplane.dev/docs/monitor-types.md): Metaplane supports the following types of monitors out-of-the-box, from monitoring row counts and freshness to mean and standard deviation.
+- [Providing model feedback](https://docs.metaplane.dev/docs/providing-model-feedback.md)
+- [Group By monitors](https://docs.metaplane.dev/docs/group-by-monitors.md): Monitor logical groups within tables/views so you can detect subtle quality issues and quickly diagnosis root cause
+- [Source-to-Target Monitors](https://docs.metaplane.dev/docs/source-to-target-monitors.md): Monitor the flow of data from a source system to a target one
+- [Incidents](https://docs.metaplane.dev/docs/incidents.md)
+- [Monitors as Code](https://docs.metaplane.dev/docs/monitors-as-code.md)
+- [Import Historical Observations](https://docs.metaplane.dev/docs/importing-historical-data.md)
+- [Monitor Forecasts](https://docs.metaplane.dev/docs/monitor-forecasts.md)
+- [New Normal Annotations](https://docs.metaplane.dev/docs/new-normal-annotations.md)
+- [Rules](https://docs.metaplane.dev/docs/rules.md): Define criteria to automatically add monitors to specific parts of your database and schema.
+- [Data CI/CD](https://docs.metaplane.dev/docs/data-ci-cd.md): Prevent data quality issues from ever hitting the warehouse
+- [Data Impact Previews](https://docs.metaplane.dev/docs/impact-analysis-previews.md): See the Downstream Impact Before You Merge
+- [Data Test Previews](https://docs.metaplane.dev/docs/data-test-previews.md): Automated testing to ensure you don't merge breaking changes to your dbt code
+- [GitHub Integration](https://docs.metaplane.dev/docs/github-integration.md): Connect Metaplane and GitHub to get powerful testing and impact previews on your pull requests
+- [GitLab Integration](https://docs.metaplane.dev/docs/gitlab-integration.md): Connect Metaplane and GitLab to get powerful testing and impact previews on your merge requests
+- [Dashboards](https://docs.metaplane.dev/docs/dashboards.md): With dashboards, you're able to see the information most relevant to you - whether that's objects related to marketing analytics or critical outages that'd impact executive reporting.
+- [Pinning schema](https://docs.metaplane.dev/docs/pinning-schema.md): Pin schemas, tables, and columns for quick access—so your most important data is always front and center.
+- [Jira integration](https://docs.metaplane.dev/docs/jira-integration.md)
+- [Metaplane Chrome Extension](https://docs.metaplane.dev/docs/metaplane-chrome-extension.md)
+- [Model Troubleshooting Guide](https://docs.metaplane.dev/docs/model-troubleshooting-guide.md): Trying to figure out how to get better results out of the machine learning models that power your monitors? Start with the steps below.
+- [End-to-End Lineage](https://docs.metaplane.dev/docs/end-to-end-lineage.md)
+
+## API Reference
+- [Sync status](https://docs.metaplane.dev/reference/getconnectionstatus.md): Get the current sync status of a connection
+- [Sync](https://docs.metaplane.dev/reference/syncconnection.md): Kicks of a task to re-sync the connection. Please note that this method returning 200 does not means the connection has finished syncing. You can poll the connection status api to determine when the sync has finished
+- [Update private key](https://docs.metaplane.dev/reference/updateprivatekey.md): Updates the private key for a connection to the newly passed in value.
+- [List all](https://docs.metaplane.dev/reference/getallconnections.md): List all connections
+- [Create Monitor](https://docs.metaplane.dev/reference/createmonitor.md): Create a new monitor on a given absolute path like "{database}.{schema}.{table}.{column}"
+- [Get monitor](https://docs.metaplane.dev/reference/getmonitor.md): Fetch an existing monitor
+- [Update monitor](https://docs.metaplane.dev/reference/updatemonitor.md): Update an existing monitor. Omitted update fields will not be change in the underlying monitor
+- [Status (deprecated)](https://docs.metaplane.dev/reference/getmonitorstatus.md): Get the latest status of a monitor. Will return a 404 if the monitor has not yet been run and modeled
+- [Evaluation History](https://docs.metaplane.dev/reference/getevaluationhistory.md): Get historical evaluations of the monitor ordered by evaluation creation time descending. By default this will return pages of 500 evaluations. To page through all data, specify the `createdAt` request to get the next chunk of data. Even though this is a post request, no data is mutated.
+- [Run](https://docs.metaplane.dev/reference/runmonitors.md): Enqueue a list of existing monitors to be immediately run. Note that a success here just means that we have enqueued the monitors to be run, not that they have finished running
+- [List for connection](https://docs.metaplane.dev/reference/getallmonitorsforsource.md): List all monitors for a specific connection
+- [Ingest Datapoint](https://docs.metaplane.dev/reference/ingestdatapoint.md): Sends a datapoint to add to the target monitorId with the current timestamp and then modeled. In private Beta, reach out for access.
+- [Import Historic Data](https://docs.metaplane.dev/reference/importhistoricdataformonitor.md): Import historic data for the monitor. Full documentation at https://docs.metaplane.dev/docs/importing-historical-data#limitations. Setting `isPreview` to  true will validate the import without actually inserting data.
+- [Get for database entity](https://docs.metaplane.dev/reference/getmonitors.md): Get all monitors targeting a specific absolute path like "{database}.{schema}.{table}.{column}"
+- [Status](https://docs.metaplane.dev/reference/getmonitorstatus2.md): Get the latest status of a monitor. Will return a 404 if the monitor has not yet been run and modeled
+- [Bulk get monitors on tables](https://docs.metaplane.dev/reference/bulkgettablemonitors.md): Get all monitors on the input table paths. Limit of 200 table paths per request.
+- [Batch tag tables](https://docs.metaplane.dev/reference/tagtables.md): Apply a tag to a collection of tables identified by absolute paths like "{database}.{schema}.{table}"
+- [Remove table tags](https://docs.metaplane.dev/reference/removetabletags.md): Remove specified tags from the table at "{database}.{schema}.{table}"
+- [Remove monitor tags](https://docs.metaplane.dev/reference/removemonitortags.md): Removes specified tags from a monitor
+- [Batch fetch tag definitions](https://docs.metaplane.dev/reference/fetchtagdefinitions.md): Fetch the Metaplane definition for the given tag name. POST is just for a more expressive request body, no mutation occurs
+- [Fetch all objects for tag](https://docs.metaplane.dev/reference/fetchtaggedobjects.md): Fetches all objects that have the target tag. This response is paginated
+- [Fetch monitors for a tag](https://docs.metaplane.dev/reference/fetchtaggedmonitors.md): Fetch all monitors associated with a tag
+- [Batch tag monitors](https://docs.metaplane.dev/reference/tagmonitors.md): Apply a tag to a collection of monitors

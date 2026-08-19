@@ -1,0 +1,137 @@
+{
+  "item": [
+    {
+      "id": "6e46a244-60ca-4875-8705-d5a870aca893",
+      "name": "Datapoints",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "401045fe-5145-4080-9e52-805420d2e1f6",
+          "name": "Submit a datapoint to a monitor",
+          "request": {
+            "name": "Submit a datapoint to a monitor",
+            "description": {},
+            "url": {
+              "path": [
+                "ingestdatapoint"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"monitorId\": \"<string>\",\n  \"value\": \"<number>\",\n  \"timestamp\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e30dfefa-be37-4fdd-b9b2-56ceac905841",
+              "name": "Datapoint ingested",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ingestdatapoint"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"monitorId\": \"<string>\",\n  \"value\": \"<number>\",\n  \"timestamp\": \"<dateTime>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.metaplane.dev",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "Authorization"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "6fbd5472-5a44-4795-83ad-201b9987c070",
+    "name": "Metaplane Connections Datapoints API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Metaplane is a data observability platform providing automated anomaly\ndetection and data quality monitoring. The REST API exposes operations\nover connections, monitors, monitor evaluations, datapoints, and tags.\n\n\nContact Support:\n Name: Metaplane",
+      "type": "text/plain"
+    }
+  }
+}

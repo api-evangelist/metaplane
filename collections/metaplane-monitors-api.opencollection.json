@@ -1,0 +1,161 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Metaplane Connections Monitors API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "Authorization",
+      "value": "{{Authorization}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Monitors",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve monitors on up to 200 table paths",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/bulkgettablemonitors",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieve monitors on up to 200 table paths"
+        },
+        {
+          "info": {
+            "name": "Add a new monitor to a database entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/createmonitor"
+          },
+          "docs": "Add a new monitor to a database entity"
+        },
+        {
+          "info": {
+            "name": "List monitors for a specific connection",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.metaplane.dev/getallmonitorsforsource",
+            "params": [
+              {
+                "name": "connectionId",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List monitors for a specific connection"
+        },
+        {
+          "info": {
+            "name": "Retrieve historical monitor evaluations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/getevaluationhistory"
+          },
+          "docs": "Retrieve historical monitor evaluations"
+        },
+        {
+          "info": {
+            "name": "Fetch existing monitor details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.metaplane.dev/getmonitor",
+            "params": [
+              {
+                "name": "monitorId",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Fetch existing monitor details"
+        },
+        {
+          "info": {
+            "name": "Get monitors for a database entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.metaplane.dev/getmonitors"
+          },
+          "docs": "Get monitors for a database entity"
+        },
+        {
+          "info": {
+            "name": "Get latest monitor status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.metaplane.dev/getmonitorstatus2",
+            "params": [
+              {
+                "name": "monitorId",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get latest monitor status"
+        },
+        {
+          "info": {
+            "name": "Import historical monitor data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/importhistoricdataformonitor"
+          },
+          "docs": "Import historical monitor data"
+        },
+        {
+          "info": {
+            "name": "Enqueue monitors for immediate execution",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/runmonitors"
+          },
+          "docs": "Enqueue monitors for immediate execution"
+        },
+        {
+          "info": {
+            "name": "Modify an existing monitor configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.metaplane.dev/updatemonitor"
+          },
+          "docs": "Modify an existing monitor configuration"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
