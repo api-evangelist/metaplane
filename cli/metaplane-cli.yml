@@ -1,0 +1,50 @@
+generated: '2026-08-29'
+method: searched
+source: https://docs.metaplane.dev/docs/metaplane-cli + https://github.com/metaplane/cli + https://github.com/metaplane/homebrew-metaplane
+provider: Metaplane
+providerId: metaplane
+name: metaplane
+binary: metaplane
+version: 0.1.4
+repository: https://github.com/metaplane/cli
+license: Apache-2.0
+docs: https://docs.metaplane.dev/docs/metaplane-cli
+note: 'A first-party, free CLI — but scope it correctly: it is a LOCAL dbt tooling utility, not a client for the
+  Metaplane REST API. It reads dbt run artifacts off disk and renders them; nothing in the documented command surface
+  authenticates to dev.api.metaplane.dev or calls a /v1 operation. The repository''s last push was 2025-02-14 and
+  no GitHub release has ever been published.'
+install:
+- method: homebrew
+  command: 'brew tap metaplane/metaplane
+
+    brew install metaplane'
+  note: 'arm64 macOS only (formula declares depends_on arch: :arm64)'
+- method: install-script
+  command: /bin/bash -c "$(curl -fsSL https://cli.metaplane.dev/spm/install.sh)"
+  note: Downloads the latest platform binary and adds it to PATH. Probed 200 on 2026-08-29.
+- method: direct-download
+  command: curl -LSs https://cli.metaplane.dev/spm/download/macos-arm64/metaplane -o $HOME/.local/bin/metaplane
+    && chmod +x $HOME/.local/bin/metaplane
+  platforms:
+  - macos-arm64
+  - linux-aarch64
+  - linux-x86_64
+  note: URLs are unpinned and always resolve to latest.
+commands:
+- group: dbt
+  command: metaplane dbt ui build
+  description: Generate a browsable HTML UI from the latest dbt run, written to a .metaplane/ directory in the working
+    directory.
+  flags:
+  - name: --target-path
+    description: Path to the dbt run results when invoking outside the dbt project root or with a custom target-path.
+  source: https://docs.metaplane.dev/docs/metaplane-cli
+flows:
+- name: Visualise a CI/CD dbt run
+  description: Run the CLI in a CI pipeline after dbt, then publish the generated .metaplane/index.html as a build
+    artifact so reviewers can inspect the run from the pull request.
+  source: https://docs.metaplane.dev/docs/metaplane-cli
+authenticates_to_api: false
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,134 @@
+generated: '2026-08-29'
+method: probed
+source: live GET of /.well-known/* on every host named in apis.yml and in the OpenAPI servers[] block
+provider: Metaplane
+providerId: metaplane
+note: No /.well-known document is served anywhere on metaplane.dev. Three hosts return honest 404s. app.metaplane.dev
+  returns HTTP 200 with the same 62,906-byte single-page-app HTML shell for EVERY /.well-known path including ones
+  that cannot exist — that is an SPA catch-all, not a document, and it is recorded as a miss. No WellKnown or SecurityTxt
+  pointer is emitted because nothing real was served.
+hosts:
+- host: www.metaplane.dev
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+    note: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+    note: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+    note: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+    note: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+    note: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+    note: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+    note: null
+- host: dev.api.metaplane.dev
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+    note: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+    note: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+    note: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+    note: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+    note: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+    note: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+    note: null
+- host: docs.metaplane.dev
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+    note: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+    note: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+    note: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+    note: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+    note: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+    note: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+    note: null
+- host: app.metaplane.dev
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: null
+    note: 'SPA catch-all: identical 62,906-byte HTML application shell, not a document. Treated as a miss.'
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: null
+    note: 'SPA catch-all: identical 62,906-byte HTML application shell, not a document. Treated as a miss.'
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: null
+    note: 'SPA catch-all: identical 62,906-byte HTML application shell, not a document. Treated as a miss.'
+  - path: /.well-known/api-catalog
+    status: 200
+    file: null
+    note: 'SPA catch-all: identical 62,906-byte HTML application shell, not a document. Treated as a miss.'
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    file: null
+    note: 'SPA catch-all: identical 62,906-byte HTML application shell, not a document. Treated as a miss.'
+  - path: /.well-known/agent-card.json
+    status: 200
+    file: null
+    note: 'SPA catch-all: identical 62,906-byte HTML application shell, not a document. Treated as a miss.'
+  - path: /.well-known/agent.json
+    status: 200
+    file: null
+    note: 'SPA catch-all: identical 62,906-byte HTML application shell, not a document. Treated as a miss.'
+documents_found: 0
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

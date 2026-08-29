@@ -1,0 +1,189 @@
+generated: '2026-08-29'
+method: derived
+source: openapi/_original/metaplane-api-openapi.yml (the provider's own published OpenAPI, harvested 2026-08-29)
+provider: Metaplane
+providerId: metaplane
+status: candidate
+note: Metaplane ships NO MCP server. Searched the docs host (docs.metaplane.dev/llms.txt indexes every published
+  page and contains no 'MCP', 'Model Context Protocol' or 'agent' entry), the GitHub org github.com/metaplane (9
+  repos, none MCP), and npm (@metaplane/mcp -> 404). The tool list below is DERIVED from the 23 real OpenAPI operations
+  as a candidate surface only; no endpoint exists and none is invented.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: api-key
+  verified: searched
+tool_count: 23
+tools:
+- name: getAllConnections
+  description: List all connections
+  rest:
+    method: GET
+    path: /v1/connections
+    operationId: getAllConnections
+  status: candidate
+- name: syncConnection
+  description: Kicks of a task to re-sync the connection. Please note that this method returning 200 does not means
+    the connection has finished syncing. You can poll the connection status api to determine when the s
+  rest:
+    method: POST
+    path: /v1/connections/{connectionId}/sync
+    operationId: syncConnection
+  status: candidate
+- name: getConnectionStatus
+  description: Get the current sync status of a connection
+  rest:
+    method: GET
+    path: /v1/connections/{connectionId}/sync/status
+    operationId: getConnectionStatus
+  status: candidate
+- name: updatePrivateKey
+  description: Updates the private key for a connection to the newly passed in value.
+  rest:
+    method: POST
+    path: /v1/connections/{connectionId}/update-private-key
+    operationId: updatePrivateKey
+  status: candidate
+- name: createMonitor
+  description: Create a new monitor on a given absolute path like "{database}.{schema}.{table}.{column}"
+  rest:
+    method: POST
+    path: /v1/monitors
+    operationId: createMonitor
+  status: candidate
+- name: getAllMonitorsForSource
+  description: List all monitors for a specific connection
+  rest:
+    method: GET
+    path: /v1/monitors/connection/{connectionId}
+    operationId: getAllMonitorsForSource
+  status: candidate
+- name: getEvaluationHistory
+  description: Get historical evaluations of the monitor ordered by evaluation creation time descending. By default
+    this will return pages of 500 evaluations. To page through all data, specify the `createdAt` reques
+  rest:
+    method: POST
+    path: /v1/monitors/evaluation-history/{monitorId}
+    operationId: getEvaluationHistory
+  status: candidate
+- name: importHistoricDataForMonitor
+  description: Import historic data for the monitor. Full documentation at https://docs.metaplane.dev/docs/importing-historical-data#limitations.
+    Setting `isPreview` to  true will validate the import without actuall
+  rest:
+    method: POST
+    path: /v1/monitors/import-historic/{monitorId}
+    operationId: importHistoricDataForMonitor
+  status: candidate
+- name: ingestDataPoint
+  description: Sends a datapoint to add to the target monitorId with the current timestamp and then modeled. In
+    private Beta, reach out for access.
+  rest:
+    method: POST
+    path: /v1/monitors/ingest-datapoint/{monitorId}
+    operationId: ingestDataPoint
+  status: candidate
+- name: getMonitors
+  description: Get all monitors targeting a specific absolute path like "{database}.{schema}.{table}.{column}"
+  rest:
+    method: GET
+    path: /v1/monitors/path/{connectionId}/{absolutePath}
+    operationId: getMonitors
+  status: candidate
+- name: runMonitors
+  description: Enqueue a list of existing monitors to be immediately run. Note that a success here just means that
+    we have enqueued the monitors to be run, not that they have finished running
+  rest:
+    method: POST
+    path: /v1/monitors/run
+    operationId: runMonitors
+  status: candidate
+- name: getMonitorStatus
+  description: Get the latest status of a monitor. Will return a 404 if the monitor has not yet been run and modeled
+  rest:
+    method: GET
+    path: /v1/monitors/status/{monitorId}
+    operationId: getMonitorStatus
+  status: candidate
+- name: getMonitor
+  description: Fetch an existing monitor
+  rest:
+    method: GET
+    path: /v1/monitors/{monitorId}
+    operationId: getMonitor
+  status: candidate
+- name: updateMonitor
+  description: Update an existing monitor. Omitted update fields will not be change in the underlying monitor
+  rest:
+    method: POST
+    path: /v1/monitors/{monitorId}
+    operationId: updateMonitor
+  status: candidate
+- name: fetchTagDefinitions
+  description: Fetch the Metaplane definition for the given tag name. POST is just for a more expressive request
+    body, no mutation occurs
+  rest:
+    method: POST
+    path: /v1/tags/batch/fetch-tags
+    operationId: fetchTagDefinitions
+  status: candidate
+- name: tagMonitors
+  description: Apply a tag to a collection of monitors
+  rest:
+    method: POST
+    path: /v1/tags/batch/tag-monitors
+    operationId: tagMonitors
+  status: candidate
+- name: tagTables
+  description: Apply a tag to a collection of tables identified by absolute paths like "{database}.{schema}.{table}"
+  rest:
+    method: POST
+    path: /v1/tags/batch/tag-tables
+    operationId: tagTables
+  status: candidate
+- name: removeMonitorTags
+  description: Removes specified tags from a monitor
+  rest:
+    method: POST
+    path: /v1/tags/remove-monitor-tags
+    operationId: removeMonitorTags
+  status: candidate
+- name: removeTableTags
+  description: Remove specified tags from the table at "{database}.{schema}.{table}"
+  rest:
+    method: POST
+    path: /v1/tags/remove-table-tags
+    operationId: removeTableTags
+  status: candidate
+- name: fetchTaggedMonitors
+  description: Fetch all monitors associated with a tag
+  rest:
+    method: GET
+    path: /v1/tags/tagged-monitors/{tag}
+    operationId: fetchTaggedMonitors
+  status: candidate
+- name: fetchTaggedObjects
+  description: Fetches all objects that have the target tag. This response is paginated
+  rest:
+    method: GET
+    path: /v1/tags/tagged-objects/{tag}
+    operationId: fetchTaggedObjects
+  status: candidate
+- name: bulkGetTableMonitors
+  description: Get all monitors on the input table paths. Limit of 200 table paths per request.
+  rest:
+    method: POST
+    path: /v2/monitors/bulk-fetch/tables/{connectionId}
+    operationId: bulkGetTableMonitors
+  status: candidate
+- name: getMonitorStatus2
+  description: Get the latest status of a monitor. Will return a 404 if the monitor has not yet been run and modeled
+  rest:
+    method: GET
+    path: /v2/monitors/status/{monitorId}
+    operationId: getMonitorStatus2
+  status: candidate
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,174 @@
+generated: '2026-08-29'
+method: searched
+source: https://docs.metaplane.dev/reference/getting-started + openapi/_original/metaplane-api-openapi.yml (23 published
+  operations)
+provider: Metaplane
+providerId: metaplane
+auth:
+  style: bearer token in the Authorization header
+  header: 'Authorization: Bearer <YOUR_SECRET_API_TOKEN>'
+  issuance: https://app.metaplane.dev/account/manage-tokens — token value is shown once at creation
+  spec_declaration: components.securitySchemes.Authorization — type apiKey, in header, name Authorization
+  note: The spec models it as an apiKey rather than http/bearer, so a generator reading only the contract will emit
+    a raw header value and omit the 'Bearer ' prefix the docs require.
+  see: authentication/metaplane-authentication.yml
+idempotency:
+  supported: false
+  header: null
+  note: No Idempotency-Key header, no idempotency guidance in the docs, and no idempotency parameter on any of the
+    16 write operations. Retrying createMonitor after a timeout will create a second monitor.
+pagination:
+  styles:
+  - name: opaque cursor
+    operations:
+    - fetchTaggedObjects
+    request:
+      nextPageToken: query, string, omit for first page
+    response:
+      data: array of PublicEntity
+      nextPageToken: string, nullable
+      hasMore: boolean
+  - name: timestamp cursor
+    operations:
+    - getEvaluationHistory
+    request:
+      createdAt: body, date-time — leave empty to start at the most recent evaluation
+      limit: body, int32, default 500, max 500
+      sortOrder: body, ASC|DESC, default DESC
+    response: bare array of MonitorStatus ordered by evaluation creation time
+  unpaginated:
+  - getAllConnections
+  - getAllMonitorsForSource
+  - fetchTaggedMonitors
+  - getMonitors
+  note: Two different pagination contracts inside one 23-operation API, and the majority of collection endpoints
+    return an unbounded array with no paging parameters at all.
+batching:
+  supported: true
+  operations:
+  - bulkGetTableMonitors
+  - runMonitors
+  - tagTables
+  - tagMonitors
+  - fetchTagDefinitions
+  - removeTableTags
+  - removeMonitorTags
+  limits:
+  - operation: bulkGetTableMonitors
+    limit: 200 table paths per request
+    source: operation description in the published spec
+field_expansion:
+  supported: true
+  note: 'Boolean query flags rather than a general expansion syntax: includeDisabled and fetchGroups on the monitor
+    and tag read operations.'
+metadata:
+  supported: true
+  note: Free-form name/description on monitors; tags (PublicTagDefinition) are the first-class labelling mechanism
+    and can be imported automatically from dbt model meta.
+request_id_tracing:
+  supported: false
+  note: No request-id or correlation header is documented or declared.
+versioning:
+  style: path prefix (/v1, /v2)
+  see: lifecycle/metaplane-lifecycle.yml
+error_envelope:
+  declared: false
+  see: errors/metaplane-problem-types.yml
+  note: The published contract declares only 200 responses on all 23 operations.
+rate_limit_signaling:
+  documented: false
+  see: rate-limits/metaplane-rate-limits.yml
+content_type: application/json
+scheduling:
+  note: Monitors carry a cronTab string and MonitorConfig.timeZone; schedules are part of the resource, not a separate
+    API.
+reversibility:
+  grade: documented
+  write_surface: true
+  note: Metaplane's write surface has genuine, first-class reversal paths — the tag operations come in explicit
+    apply/remove pairs and monitors carry an isEnabled flag — but the docs state NO window for any of them, and
+    no operation returns or accepts a Sunset/expiry. Graded `documented` (reversal path exists) rather than `verified`
+    (path plus a stated window). No window is asserted here that the provider does not publish.
+  surfaces:
+  - action: Create a monitor
+    operationId: createMonitor
+    method: POST
+    path: /v1/monitors
+    reversal:
+      type: disable
+      operationId: updateMonitor
+      method: POST
+      path: /v1/monitors/{monitorId}
+      how: 'POST the monitor with isEnabled: false'
+      window: null
+      note: Reversal is a disable, not a delete — the published API exposes no monitor delete operation at all,
+        so a monitor created in error can be switched off but not removed through the API.
+    grade: documented
+  - action: Tag tables
+    operationId: tagTables
+    method: POST
+    path: /v1/tags/batch/tag-tables
+    reversal:
+      type: remove
+      operationId: removeTableTags
+      method: POST
+      path: /v1/tags/remove-table-tags
+      window: null
+    grade: documented
+  - action: Tag monitors
+    operationId: tagMonitors
+    method: POST
+    path: /v1/tags/batch/tag-monitors
+    reversal:
+      type: remove
+      operationId: removeMonitorTags
+      method: POST
+      path: /v1/tags/remove-monitor-tags
+      window: null
+    grade: documented
+  - action: Import historic observations
+    operationId: importHistoricDataForMonitor
+    method: POST
+    path: /v1/monitors/import-historic/{monitorId}
+    reversal:
+      type: none
+      note: No un-import operation is published. The request body does carry an isPreview flag which validates the
+        import without inserting data — that is a dry-run, not a reversal.
+      window: null
+    grade: none
+  - action: Ingest a datapoint
+    operationId: ingestDataPoint
+    method: POST
+    path: /v1/monitors/ingest-datapoint/{monitorId}
+    reversal:
+      type: none
+      window: null
+      note: No delete or retract operation. Private beta per the docs.
+    grade: none
+  - action: Update a connection private key
+    operationId: updatePrivateKey
+    method: POST
+    path: /v1/connections/{connectionId}/update-private-key
+    reversal:
+      type: overwrite
+      note: Reversible only by posting the previous key again; the API returns no prior value, so the caller must
+        hold it.
+      window: null
+    grade: documented
+  - action: Run monitors
+    operationId: runMonitors
+    method: POST
+    path: /v1/monitors/run
+    reversal:
+      type: none
+      note: Enqueues an evaluation; no cancel operation is published.
+      window: null
+    grade: none
+dry_run_mode:
+  supported: true
+  scope: partial
+  note: 'importHistoricDataForMonitor accepts isPreview: true to validate an import without inserting data (https://docs.metaplane.dev/docs/importing-historical-data).
+    No other write operation offers a dry run.'
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -2,6 +2,8 @@
 
 > Metaplane is a data observability platform that helps data teams know when things break, what went wrong, and how to fix it.
 
+Append .md to any documentation page URL to get its markdown version.
+
 ## Guides
 - [Getting started](https://docs.metaplane.dev/docs/overview.md): You can add observability to your data stack in less than 10 minutes. To get started, you only have to do three things: add a source, integrate Slack, and add monitors.
 - [Setting up Metaplane for the first time](https://docs.metaplane.dev/docs/setting-up-metaplane-for-the-first-time.md)

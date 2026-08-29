@@ -1,0 +1,41 @@
+generated: '2026-08-29'
+method: derived
+source: openapi/_original/metaplane-api-openapi.yml + https://docs.metaplane.dev/reference/ operation descriptions
+provider: Metaplane
+providerId: metaplane
+format: none
+note: 'HONEST GAP, not an omission by this pipeline: Metaplane''s published OpenAPI declares exactly one response
+  per operation — 200 ''Success'' — across all 23 operations. There is no error catalog, no error schema, no application/problem+json,
+  and no error-reference page in the docs. The two problem types below are the only failure modes the provider documents
+  anywhere, and both are stated in prose inside an operation description rather than in the contract. An agent calling
+  this API cannot know from the spec what a failure looks like.'
+envelope:
+  declared: false
+  observed: HTTP 401 with an empty text/plain body on an unauthenticated GET https://dev.api.metaplane.dev/v1/connections
+    (probed 2026-08-29).
+problem_types:
+- status: 404
+  title: Monitor not yet run
+  operations:
+  - getMonitorStatus
+  - getMonitorStatus2
+  detail: Returned when the monitor exists but has not yet been run and modeled.
+  remediation: Enqueue the monitor with runMonitors (POST /v1/monitors/run) and poll status once an evaluation has
+    completed.
+  source: https://docs.metaplane.dev/reference/getmonitorstatus2 — 'Will return a 404 if the monitor has not yet
+    been run and modeled'
+  declared_in_spec: false
+- status: 401
+  title: Missing or invalid API token
+  operations:
+  - '*'
+  detail: Every operation requires the Authorization header; requests without a valid bearer token are rejected.
+  remediation: 'Generate a token at https://app.metaplane.dev/account/manage-tokens and send Authorization: Bearer
+    <token>.'
+  source: https://docs.metaplane.dev/reference/getting-started + live probe of https://dev.api.metaplane.dev/v1/connections
+    (401, 2026-08-29)
+  declared_in_spec: false
+declared_error_responses: 0
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

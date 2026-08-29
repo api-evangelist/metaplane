@@ -1,0 +1,71 @@
+generated: '2026-08-29'
+method: searched
+source: https://docs.metaplane.dev/docs/metaplane-cli + https://github.com/metaplane/cli + https://github.com/metaplane/homebrew-metaplane
+provider: Metaplane
+providerId: metaplane
+note: 'Metaplane publishes NO client SDK on any language registry. npm, PyPI, RubyGems, crates.io, NuGet, Maven
+  Central and pkg.go.dev were all queried for metaplane / @metaplane/* / metaplane-cli on 2026-08-29 and every lookup
+  returned 404. The only first-party distributable is the Metaplane CLI, shipped as a prebuilt binary from the provider''s
+  own CDN (cli.metaplane.dev) and via a Homebrew tap. The CLI monorepo''s package.json declares "private": true,
+  which is why it never reaches npm.'
+packages:
+- name: metaplane
+  official: true
+  registry: homebrew
+  language: binary
+  install: brew tap metaplane/metaplane && brew install metaplane
+  url: https://github.com/metaplane/homebrew-metaplane
+  version: 0.1.4
+  published: null
+  note: 'Version read verbatim from Formula/metaplane.rb in the provider''s own tap (version "0.1.4"). The formula
+    carries no release date and the tap publishes no releases; the tap repository''s last push was 2025-03-14, so
+    published: null means checked, no dated release to record. arm64 macOS only (depends_on arch: :arm64).'
+- name: metaplane
+  official: true
+  registry: cdn
+  language: binary
+  install: /bin/bash -c "$(curl -fsSL https://cli.metaplane.dev/spm/install.sh)"
+  url: https://cli.metaplane.dev/spm/install.sh
+  version: null
+  published: null
+  platforms:
+  - macos-arm64
+  - linux-aarch64
+  - linux-x86_64
+  note: Unpinned CDN distribution. The download URLs (https://cli.metaplane.dev/spm/download/<platform>/metaplane)
+    carry no version segment and always float to latest, so a consumer cannot tell which build they are installing
+    either — that is the finding. install.sh returned 200 on 2026-08-29; /spm/latest and /spm/version return 403
+    AccessDenied (S3), so there is no queryable version manifest. The Homebrew formula pins the same floating URL
+    to sha256 5dd89f8... at version 0.1.4.
+- name: '@mp/metaplane-cli'
+  official: true
+  registry: none
+  language: TypeScript
+  url: https://github.com/metaplane/cli
+  version: 0.1.0
+  published: null
+  note: 'Source package for the CLI, Apache-2.0. package.json on main declares "private": true and the name is workspace-scoped
+    (@mp/), so it is deliberately never published to npm — registry.npmjs.org/@mp%2fmetaplane-cli and /metaplane-cli
+    both 404. Repository last pushed 2025-02-14; no GitHub releases published. version read from package.json, not
+    a registry.'
+registries_checked:
+- registry: npm
+  queries:
+  - metaplane
+  - '@metaplane/cli'
+  - metaplane-cli
+  - '@metaplane/mcp'
+  result: 404 on all
+- registry: pypi
+  queries:
+  - metaplane
+  - metaplane-cli
+  result: 404 on all
+- registry: homebrew-tap
+  queries:
+  - metaplane/homebrew-metaplane
+  result: 200, Formula/metaplane.rb v0.1.4
+official_sdk_count: 0
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,19 +1,18 @@
-generated: '2026-07-11'
+generated: '2026-08-29'
 method: probed
 source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
 hosts:
 - host: www.metaplane.dev
   https: true
   tls_version: TLSv1.3
-  cert_expires: Aug 17 07:46:28 2026 GMT
+  cert_expires: Oct 15 13:45:36 2026 GMT
   hsts: true
   hsts_max_age: 31536000
-- host: api.metaplane.dev
+- host: dev.api.metaplane.dev
   https: true
   tls_version: TLSv1.3
-  cert_expires: Sep 24 09:12:28 2026 GMT
-  hsts: true
-  hsts_max_age: 15552000
+  cert_expires: Nov 26 20:45:25 2026 GMT
+  hsts: null
 domains:
 - domain: metaplane.dev
   dnssec: false

@@ -1,16 +1,48 @@
-generated: '2026-07-11'
-method: derived
-source: openapi/metaplane-openapi.yml
+generated: '2026-08-29'
+method: searched
+source: https://docs.metaplane.dev/reference/getting-started
+spec_source: openapi/_original/metaplane-api-openapi.yml
+docs: https://docs.metaplane.dev/reference/getting-started
 summary:
   types:
   - apiKey
   api_key_in:
   - header
+  oauth2: false
+  openid: false
+  mtls: false
 schemes:
-- name: apiKeyAuth
+- name: Authorization
   type: apiKey
   in: header
   parameter: Authorization
-  description: Metaplane API key
+  description: Copy in your API key generated from metaplane
+  documented_form: 'Authorization: Bearer <YOUR_SECRET_API_TOKEN>'
+  token_management: https://app.metaplane.dev/account/manage-tokens
+  scopes: []
   sources:
-  - openapi/metaplane-openapi.yml
+  - openapi/metaplane-connections-api-openapi.yml
+  - openapi/metaplane-monitors-api-openapi.yml
+  - openapi/metaplane-tags-api-openapi.yml
+  - https://docs.metaplane.dev/reference/getting-started
+notes:
+- >-
+  SPEC/DOCS MISMATCH worth naming. Metaplane's getting-started page states "This API uses token bearer
+  based authentication" and shows the header as "Authorization: Bearer <YOUR_SECRET_API_TOKEN>", but the
+  published OpenAPI models the same thing as an apiKey scheme in the Authorization header with no bearer
+  format. A client generated from the contract alone will send the raw token without the "Bearer " prefix.
+  The accurate declaration is type http, scheme bearer.
+- >-
+  Tokens are user-generated at https://app.metaplane.dev/account/manage-tokens and the value is displayed
+  exactly once at creation. No scopes, no expiry and no rotation policy are documented; there is no token
+  or key management operation in the 23-operation public API.
+- >-
+  Probed live 2026-08-29 - GET https://dev.api.metaplane.dev/v1/connections without credentials returns
+  HTTP 401 with an empty text/plain body.
+- >-
+  No OAuth 2.0 and no OIDC. /.well-known/oauth-authorization-server and /.well-known/openid-configuration
+  return 404 on www.metaplane.dev, docs.metaplane.dev and dev.api.metaplane.dev. Enterprise SSO
+  (Okta / AD / SAML, per https://www.metaplane.dev/pricing) governs web-app login, not API authorization.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

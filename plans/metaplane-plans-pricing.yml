@@ -1,141 +1,107 @@
 specification: API Commons Plans
 specificationVersion: '0.1'
-schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
 provider: Metaplane
 providerId: metaplane
+generated: '2026-08-29'
+method: searched
+source: https://www.metaplane.dev/pricing
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-04'
-tags:
-  - AIOps
-  - Data Observability
-description: Machine-readable plans and pricing scaffold for this API provider. Conforms to the API Commons
-  Plans schema. Tier limits and prices are scaffold defaults; replace with provider-published values.
+modified: '2026-08-29'
+description: Metaplane's published plans, read verbatim from the pricing page on 2026-08-29. Replaces a 2026-05-04
+  bulk-sweep scaffold whose tiers, quotas and overage prices were invented.
+currency: USD
+billing_unit: monitored table
+plan_count: 3
+note: 'Metaplane prices the PRODUCT, not the API — no plan meters API calls and no tier gates access to the REST
+  API by request volume. The API-relevant gate is on the alerting side: the pricing comparison table lists ''API,
+  Webhooks'' as alert destinations on ENTERPRISE only, while Free and Pro get Slack/Email/MS Teams (Pro adds PagerDuty).
+  Pro pricing is usage-based per monitored table and the per-table rate is not published; Enterprise is contact-sales.
+  Snowflake customers may pay with existing Snowflake credits.'
 plans:
-  - id: metaplane-free
-    name: Free
-    type: freemium
-    description: Free entry tier for the Metaplane API surface. Intended for evaluation, prototyping,
-      and low-volume integrations. Real limits and pricing must be reconciled with the provider's published
-      plan documentation.
-    entries:
-      - label: API Requests
-        description: Monthly API request quota across all included endpoints
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: 1000
-        timeFrame: month
-        geo: global
-        domains: []
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the free tier
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 10
-        timeFrame: minute
-        geo: global
-        domains: []
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-    elements:
-      - name: Public Documentation
-      - name: Community Support
-      - name: Sandbox Access
-      - name: Metaplane
-  - id: metaplane-pro
-    name: Professional
-    type: paid
-    description: Production tier for Metaplane. Provides higher quotas, priority support, and access to
-      the broader API portfolio. Pricing placeholder; align with the provider's pricing page.
-    entries:
-      - label: API Requests
-        description: Monthly API request quota
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: 100000
-        timeFrame: month
-        geo: global
-        domains: []
-        unit: 1
-        price: TBD
-        userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the professional tier
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 100
-        timeFrame: minute
-        geo: global
-        domains: []
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-      - label: Overage
-        description: Per-request price after monthly quota is exceeded
-        name: overage
-        type: metered
-        metric: requests
-        limit: -1
-        timeFrame: month
-        geo: global
-        domains: []
-        unit: 1000
-        price: TBD
-        userMultiplied: false
-    elements:
-      - name: All Production Endpoints
-      - name: Email Support
-      - name: SLA Targets
-      - name: Webhook Subscriptions
-      - name: Metaplane
-  - id: metaplane-enterprise
-    name: Enterprise
-    type: enterprise
-    description: Custom-negotiated tier for Metaplane. Includes dedicated capacity, contractual SLAs,
-      security review, data residency options, and named technical account management.
-    entries:
-      - label: API Requests
-        description: Negotiated request volume; -1 indicates uncapped subject to fair use
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: -1
-        timeFrame: month
-        geo: configurable
-        domains: []
-        unit: 1
-        price: custom
-        userMultiplied: false
-      - label: Rate Limit
-        description: Negotiated burst and steady-state rate
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 1000
-        timeFrame: minute
-        geo: configurable
-        domains: []
-        unit: 1
-        price: custom
-        userMultiplied: false
-    elements:
-      - name: Unlimited / Negotiated Volume
-      - name: 24/7 Dedicated Support
-      - name: Contractual SLA
-      - name: Security & Compliance Review
-      - name: Dedicated Account Manager
-      - name: Custom Data Residency
-      - name: Metaplane
+- id: metaplane-free
+  name: Free
+  type: freemium
+  price: '0.00'
+  currency: USD
+  period: month
+  cta: Start for free — no credit card required, choose your plan after 14 days
+  limits:
+  - name: monitored_tables
+    limit: 10
+  - name: custom_sql_monitors
+    limit: 3
+  - name: users
+    limit: 4
+    note: The plan card says 4 users; the comparison table row 'Number of users' says 1. The provider's own page
+      disagrees with itself — recorded as published, not reconciled.
+  elements:
+  - Monitoring and anomaly detection
+  - Manual thresholds
+  - Alerting to Slack, Email, MS Teams
+  - 'Warehouse connectors: Snowflake, BigQuery, Redshift, Clickhouse, Postgres, MySQL, SQL Server, Databricks'
+  - dbt transformation integration
+  - 'BI: Looker, Tableau, Metabase, Mode, Sigma, PowerBI'
+  - 'Monitor types: volume, schema, freshness, uniqueness, nullness, statistical distribution, custom SQL'
+  - SOC 2, GDPR, HIPAA
+  - Email support
+- id: metaplane-pro
+  name: Pro
+  type: usage-based
+  price: null
+  currency: USD
+  period: month
+  price_note: '''Usage-based — pay for what you use'', priced per monitored table. The per-table rate is NOT published
+    on the pricing page.'
+  limits:
+  - name: monitored_tables
+    limit: 100
+  - name: custom_sql_monitors
+    limit: 5
+  - name: users
+    limit: 12
+    note: 'Plan card: 12 users, unlimited viewers. Comparison table row says 5.'
+  elements:
+  - Everything in Free
+  - Column-level lineage
+  - Data CI/CD
+  - Cost & performance monitoring
+  - Data insights
+  - Partition monitors
+  - Rolling window monitors
+  - dbt job monitoring
+  - Query monitoring
+  - Alerting adds PagerDuty
+  - Email support
+  addons:
+  - Data Impact Previews
+  - Data Test Previews
+  - Warehouse Spend Monitoring / Credit and Spend Monitoring
+- id: metaplane-enterprise
+  name: Enterprise
+  type: enterprise
+  price: custom
+  currency: USD
+  period: custom
+  cta: Contact sales
+  limits:
+  - name: monitored_tables
+    limit: -1
+    note: Unlimited
+  - name: custom_sql_monitors
+    limit: 10
+  - name: users
+    limit: -1
+    note: 12+ users, unlimited viewers
+  elements:
+  - Everything in Pro
+  - Custom integrations
+  - SSO — Okta, AD, SAML
+  - AWS or Azure PrivateLink support
+  - Alert destinations add API and Webhooks
+  - Premium support, shared Slack channel, CSM and engineering time
+payment_options:
+- name: Snowflake credits
+  note: '''Use Snowflake? Pay with your existing Snowflake credits.'' — https://www.metaplane.dev/pricing'
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com

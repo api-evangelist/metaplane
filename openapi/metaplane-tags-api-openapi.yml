@@ -1,85 +1,557 @@
-openapi: 3.1.0
+openapi: 3.0.1
 info:
-  title: Metaplane Connections Tags API
-  description: 'Metaplane is a data observability platform providing automated anomaly
-
-    detection and data quality monitoring. The REST API exposes operations
-
-    over connections, monitors, monitor evaluations, datapoints, and tags.
-
-    '
+  title: Metaplane Tags API
+  description: 'The Tags API from Metaplane — 7 operation(s) for tags. Data observability: automated anomaly detection and
+    data quality monitoring.'
   version: '1.0'
   contact:
     name: Metaplane
-    url: https://docs.metaplane.dev/
+    url: https://docs.metaplane.dev/reference/getting-started
 servers:
-- url: https://api.metaplane.dev
-  description: Production API
+- url: https://dev.api.metaplane.dev
 security:
-- apiKeyAuth: []
+- Authorization: []
 tags:
 - name: Tags
 paths:
-  /fetchtagdefinitions:
+  /v1/tags/batch/fetch-tags:
     post:
       tags:
       - Tags
-      summary: Retrieve tag definitions
+      summary: Batch fetch tag definitions
+      description: Fetch the Metaplane definition for the given tag name. POST is just for a more expressive request body,
+        no mutation occurs
+      operationId: fetchTagDefinitions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagDefinitionRequest'
+        required: false
       responses:
         '200':
-          description: Tag definitions
-  /fetchtaggedmonitors:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicTagDefinition'
+  /v1/tags/tagged-monitors/{tag}:
+    get:
+      tags:
+      - Tags
+      summary: Fetch monitors for a tag
+      description: Fetch all monitors associated with a tag
+      operationId: fetchTaggedMonitors
+      parameters:
+      - name: tag
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: includeDisabled
+        in: query
+        schema:
+          type: boolean
+      - name: fetchGroups
+        in: query
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicMonitor'
+  /v1/tags/tagged-objects/{tag}:
+    get:
+      tags:
+      - Tags
+      summary: Fetch all objects for tag
+      description: Fetches all objects that have the target tag. This response is paginated
+      operationId: fetchTaggedObjects
+      parameters:
+      - name: tag
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: nextPageToken
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaggedObjectResponse'
+  /v1/tags/remove-monitor-tags:
     post:
       tags:
       - Tags
-      summary: Get monitors associated with a tag
+      summary: Remove monitor tags
+      description: Removes specified tags from a monitor
+      operationId: removeMonitorTags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoveMonitorTagsRequest'
+        required: false
       responses:
         '200':
-          description: Tagged monitors
-  /fetchtaggedobjects:
+          description: Success
+  /v1/tags/remove-table-tags:
     post:
       tags:
       - Tags
-      summary: Retrieve all tagged objects
+      summary: Remove table tags
+      description: Remove specified tags from the table at "{database}.{schema}.{table}"
+      operationId: removeTableTags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemoveTableTagsRequest'
+        required: false
       responses:
         '200':
-          description: Tagged objects
-  /removemonitortags:
+          description: Success
+  /v1/tags/batch/tag-monitors:
     post:
       tags:
       - Tags
-      summary: Remove tags from a monitor
+      summary: Batch tag monitors
+      description: Apply a tag to a collection of monitors
+      operationId: tagMonitors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagMonitorsRequest'
+        required: false
       responses:
         '200':
-          description: Tags removed
-  /removetabletags:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagMonitorsResult'
+  /v1/tags/batch/tag-tables:
     post:
       tags:
       - Tags
-      summary: Remove tags from a table
+      summary: Batch tag tables
+      description: Apply a tag to a collection of tables identified by absolute paths like "{database}.{schema}.{table}"
+      operationId: tagTables
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagTablesRequest'
+        required: false
       responses:
         '200':
-          description: Tags removed
-  /tagmonitors:
-    post:
-      tags:
-      - Tags
-      summary: Apply a tag to multiple monitors
-      responses:
-        '200':
-          description: Tagged
-  /tagtables:
-    post:
-      tags:
-      - Tags
-      summary: Apply a tag to multiple tables
-      responses:
-        '200':
-          description: Tagged
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagTablesResult'
 components:
+  schemas:
+    LabelNameValue:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+    MonitorConfig:
+      type: object
+      properties:
+        customSql:
+          type: string
+          nullable: true
+        customMetricUnitType:
+          type: string
+          description: Overrides the display type in the metaplane UI. Default to float if not specified. Only applies to
+            custom sql monitors
+          nullable: true
+          enum:
+          - INT
+          - FLOAT
+          - PERCENT
+          - SECOND
+          - BYTE
+          - MILLISECOND
+        incrementalClause:
+          $ref: '#/components/schemas/PublicIncrementalClause'
+        customWhereClause:
+          type: string
+          nullable: true
+        alertRule:
+          $ref: '#/components/schemas/PublicAlertRule'
+        groupByColumns:
+          type: array
+          description: List of columns to group query by
+          nullable: true
+          items:
+            type: string
+            description: List of columns to group query by
+            nullable: true
+        timeZone:
+          type: string
+          description: 'Timezone identifier like: America/New_York'
+          nullable: true
+      nullable: true
+    MonitorGrouping:
+      type: object
+      properties:
+        groupings:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelNameValue'
+      description: List of all groups that have seen at least one datapoint for this monitor
+      nullable: true
+    PublicAlertRule:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - ANOMALY
+          - MANUAL
+        numFailuresBeforeAlert:
+          type: integer
+          description: Number of time a monitor can fail before an incident is created
+          format: int32
+          nullable: true
+      description: Optional alert rule configuration. Defaults to ANOMALY
+      nullable: true
+      discriminator:
+        propertyName: type
+        mapping:
+          MANUAL: '#/components/schemas/PublicManualThresholdRule'
+          ANOMALY: '#/components/schemas/PublicAnomalyAlertRule'
+      oneOf:
+      - $ref: '#/components/schemas/PublicAnomalyAlertRule'
+      - $ref: '#/components/schemas/PublicManualThresholdRule'
+    PublicAnomalyAlertRule:
+      type: object
+      properties:
+        sensitivity:
+          type: number
+          description: 'Control the bounds of the model. The default value is 3.0.
+
+            0.3 high is the highest sensitivity correlating with smallest bounds.
+
+            6.0 Is lowest sensitivity corresponding with the largest bounds.
+
+            '
+          format: double
+          default: 3
+        monitorTypeOverride:
+          type: string
+          enum:
+          - ROW_COUNT
+          - COLUMN_COUNT
+          - CARDINALITY
+          - UNIQUENESS
+          - NULLNESS
+          - PERCENT_ZERO
+          - PERCENT_NEGATIVE
+          - MIN
+          - MAX
+          - MEAN
+          - STDDEV
+          - FRESHNESS
+          - CUSTOM
+          - PUSH
+          - SUM
+          - DURATION
+          - GENERIC_OBJECT
+        modelClassType:
+          type: string
+          enum:
+          - STATIONARY
+          - NONE
+        modelBoundsOverride:
+          type: string
+          description: Flags to completely override part of the model bounds
+          nullable: true
+          enum:
+          - UPPER_ONLY
+          - LOWER_ONLY
+        minLowerBoundSize:
+          type: number
+          description: 'Controls the minimum size for the lower bound of the models predictive range
+
+            '
+          format: double
+          nullable: true
+          default: 3
+        minUpperBoundSize:
+          type: number
+          description: 'Controls the minimum size for the upper bound of the models predictive range
+
+            '
+          format: double
+          nullable: true
+          default: 3
+    PublicEntity:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - TABLE
+          - COLUMN
+          - DATABASE
+          - SCHEMA
+        absolutePath:
+          type: string
+          description: Path of entity type delimited by `.`
+    PublicIncrementalClause:
+      type: object
+      properties:
+        columnName:
+          type: string
+        duration:
+          $ref: '#/components/schemas/TimeDuration'
+      nullable: true
+    PublicManualThreshold:
+      type: object
+      properties:
+        operatorType:
+          type: string
+          enum:
+          - GREATER_THAN
+          - GREATER_THAN_EQUALS
+          - LESS_THAN
+          - LESS_THAN_EQUALS
+          - EQUAL
+          - NOT_EQUAL
+        value:
+          type: number
+          format: double
+    PublicManualThresholdRule:
+      type: object
+      properties:
+        thresholds:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicManualThreshold'
+    PublicMonitor:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+          - ROW_COUNT
+          - COLUMN_COUNT
+          - CARDINALITY
+          - UNIQUENESS
+          - NULLNESS
+          - PERCENT_ZERO
+          - PERCENT_NEGATIVE
+          - MIN
+          - MAX
+          - MEAN
+          - STDDEV
+          - FRESHNESS
+          - CUSTOM
+          - PUSH
+          - SUM
+          - DURATION
+          - GENERIC_OBJECT
+        genericObjectSubtype:
+          type: string
+        valueType:
+          type: string
+          enum:
+          - METRIC
+          - SOURCE_TO_TARGET
+        cronTab:
+          type: string
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        isEnabled:
+          type: boolean
+        config:
+          $ref: '#/components/schemas/MonitorConfig'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        absolutePath:
+          type: string
+        entityType:
+          type: string
+        connectionId:
+          type: string
+          format: uuid
+        monitorTags:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        monitorGroups:
+          type: array
+          description: List of all groups that have seen at least one datapoint for this monitor
+          nullable: true
+          items:
+            $ref: '#/components/schemas/MonitorGrouping'
+    PublicTagDefinition:
+      type: object
+      properties:
+        tagId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    RemoveMonitorTagsRequest:
+      type: object
+      properties:
+        tagNames:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        monitorId:
+          type: string
+          format: uuid
+    RemoveTableTagsRequest:
+      type: object
+      properties:
+        tagNames:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        connectionId:
+          type: string
+          format: uuid
+        absoluteTablePath:
+          type: string
+          description: The target tables represented as an absolute path like "{database}.{schema}.{table}"
+    TagDefinitionRequest:
+      type: object
+      properties:
+        names:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+    TagMonitorsRequest:
+      type: object
+      properties:
+        tagName:
+          type: string
+        monitorIds:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            format: uuid
+    TagMonitorsResult:
+      type: object
+      properties:
+        successfullyTaggedMonitors:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            format: uuid
+        notFoundMonitors:
+          uniqueItems: true
+          type: array
+          nullable: true
+          items:
+            type: string
+            format: uuid
+            nullable: true
+    TagTablesRequest:
+      type: object
+      properties:
+        tagName:
+          type: string
+        connectionId:
+          type: string
+          format: uuid
+        absoluteTablePaths:
+          uniqueItems: true
+          type: array
+          description: A collection of tables represented as absolute paths like "{database}.{schema}.{table}"
+          items:
+            type: string
+            description: A collection of tables represented as absolute paths like "{database}.{schema}.{table}"
+    TagTablesResult:
+      type: object
+      properties:
+        successfullyTaggedTablePaths:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        notFoundTablePaths:
+          uniqueItems: true
+          type: array
+          nullable: true
+          items:
+            type: string
+            nullable: true
+    TaggedObjectResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicEntity'
+        nextPageToken:
+          type: string
+          nullable: true
+        hasMore:
+          type: boolean
+    TimeDuration:
+      type: object
+      properties:
+        days:
+          type: integer
+          format: int64
+        hours:
+          type: integer
+          format: int64
+        minutes:
+          type: integer
+          format: int64
   securitySchemes:
-    apiKeyAuth:
+    Authorization:
       type: apiKey
-      in: header
+      description: Copy in your API key generated from metaplane
       name: Authorization
-      description: Metaplane API key
+      in: header
+x-api-evangelist:
+  harvested: '2026-08-29'
+  method: searched
+  source: Split by tag from openapi/_original/metaplane-api-openapi.yml, itself the union of the 23 OpenAPI documents Metaplane
+    publishes at https://docs.metaplane.dev/reference/<operation>.md

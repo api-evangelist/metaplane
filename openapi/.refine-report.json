@@ -15,6 +15,12 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
+  "notes": [
+    "metaplane-connections-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "metaplane-datapoints-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "metaplane-monitors-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "metaplane-tags-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
   "skipped": []
 }

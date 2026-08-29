@@ -1,139 +1,903 @@
-openapi: 3.1.0
+openapi: 3.0.1
 info:
-  title: Metaplane Connections Monitors API
-  description: 'Metaplane is a data observability platform providing automated anomaly
-
-    detection and data quality monitoring. The REST API exposes operations
-
-    over connections, monitors, monitor evaluations, datapoints, and tags.
-
-    '
+  title: Metaplane Monitors API
+  description: 'The Monitors API from Metaplane — 12 operation(s) for monitors. Data observability: automated anomaly detection
+    and data quality monitoring.'
   version: '1.0'
   contact:
     name: Metaplane
-    url: https://docs.metaplane.dev/
+    url: https://docs.metaplane.dev/reference/getting-started
 servers:
-- url: https://api.metaplane.dev
-  description: Production API
+- url: https://dev.api.metaplane.dev
 security:
-- apiKeyAuth: []
+- Authorization: []
 tags:
 - name: Monitors
 paths:
-  /bulkgettablemonitors:
+  /v2/monitors/bulk-fetch/tables/{connectionId}:
     post:
       tags:
       - Monitors
-      summary: Retrieve monitors on up to 200 table paths
-      requestBody:
+      summary: Bulk get monitors on tables
+      description: Get all monitors on the input table paths. Limit of 200 table paths per request.
+      operationId: bulkGetTableMonitors
+      parameters:
+      - name: connectionId
+        in: path
         required: true
+        schema:
+          type: string
+          format: uuid
+      - name: includeDisabled
+        in: query
+        schema:
+          type: boolean
+      - name: fetchGroups
+        in: query
+        schema:
+          type: boolean
+      requestBody:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                tablePaths:
-                  type: array
-                  items:
-                    type: string
-                  maxItems: 200
+              $ref: '#/components/schemas/BulkFetchMonitorTablesRequest'
+        required: false
       responses:
         '200':
-          description: Monitors per table
-  /createmonitor:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonitorListResult'
+  /v1/monitors:
     post:
       tags:
       - Monitors
-      summary: Add a new monitor to a database entity
+      summary: Create Monitor
+      description: Create a new monitor on a given absolute path like "{database}.{schema}.{table}.{column}"
+      operationId: createMonitor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MonitorEgg'
+        required: false
       responses:
-        '201':
-          description: Monitor created
-  /getallmonitorsforsource:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicMonitor'
+  /v1/monitors/connection/{connectionId}:
     get:
       tags:
       - Monitors
-      summary: List monitors for a specific connection
+      summary: List for connection
+      description: List all monitors for a specific connection
+      operationId: getAllMonitorsForSource
       parameters:
-      - in: query
-        name: connectionId
+      - name: connectionId
+        in: path
         required: true
         schema:
           type: string
+          format: uuid
+      - name: includeDisabled
+        in: query
+        schema:
+          type: boolean
+      - name: fetchGroups
+        in: query
+        schema:
+          type: boolean
       responses:
         '200':
-          description: Monitors
-  /getevaluationhistory:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonitorListResult'
+  /v1/monitors/evaluation-history/{monitorId}:
     post:
       tags:
       - Monitors
-      summary: Retrieve historical monitor evaluations
-      responses:
-        '200':
-          description: Evaluation history
-  /getmonitor:
-    get:
-      tags:
-      - Monitors
-      summary: Fetch existing monitor details
+      summary: Evaluation History
+      description: Get historical evaluations of the monitor ordered by evaluation creation time descending. By default this
+        will return pages of 500 evaluations. To page through all data, specify the `createdAt` request to get the next chunk
+        of data. Even though this is a post request, no data is mutated.
+      operationId: getEvaluationHistory
       parameters:
-      - in: query
-        name: monitorId
+      - name: monitorId
+        in: path
         required: true
         schema:
           type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EvaluationHistoryRequest'
+        required: false
       responses:
         '200':
-          description: Monitor details
-  /getmonitors:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MonitorStatus'
+  /v1/monitors/{monitorId}:
     get:
       tags:
       - Monitors
-      summary: Get monitors for a database entity
-      responses:
-        '200':
-          description: Monitors
-  /getmonitorstatus2:
-    get:
-      tags:
-      - Monitors
-      summary: Get latest monitor status
+      summary: Get monitor
+      description: Fetch an existing monitor
+      operationId: getMonitor
       parameters:
-      - in: query
-        name: monitorId
+      - name: monitorId
+        in: path
         required: true
         schema:
           type: string
+          format: uuid
+      - name: fetchGroups
+        in: query
+        schema:
+          type: boolean
       responses:
         '200':
-          description: Monitor status
-  /importhistoricdataformonitor:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicMonitor'
     post:
       tags:
       - Monitors
-      summary: Import historical monitor data
-      responses:
-        '202':
-          description: Import accepted
-  /runmonitors:
-    post:
-      tags:
-      - Monitors
-      summary: Enqueue monitors for immediate execution
-      responses:
-        '202':
-          description: Run scheduled
-  /updatemonitor:
-    post:
-      tags:
-      - Monitors
-      summary: Modify an existing monitor configuration
+      summary: Update monitor
+      description: Update an existing monitor. Omitted update fields will not be change in the underlying monitor
+      operationId: updateMonitor
+      parameters:
+      - name: monitorId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MonitorUpdate'
+        required: false
       responses:
         '200':
-          description: Monitor updated
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicMonitor'
+  /v1/monitors/path/{connectionId}/{absolutePath}:
+    get:
+      tags:
+      - Monitors
+      summary: Get for database entity
+      description: Get all monitors targeting a specific absolute path like "{database}.{schema}.{table}.{column}"
+      operationId: getMonitors
+      parameters:
+      - name: connectionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: absolutePath
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: entityType
+        in: query
+        schema:
+          type: string
+          enum:
+          - TABLE
+          - COLUMN
+          - DATABASE
+          - SCHEMA
+      - name: includeDisabled
+        in: query
+        schema:
+          type: boolean
+      - name: fetchGroups
+        in: query
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonitorListResult'
+  /v1/monitors/status/{monitorId}:
+    get:
+      tags:
+      - Monitors
+      summary: Status (deprecated)
+      description: Get the latest status of a monitor. Will return a 404 if the monitor has not yet been run and modeled
+      operationId: getMonitorStatus
+      parameters:
+      - name: monitorId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonitorStatus'
+  /v2/monitors/status/{monitorId}:
+    get:
+      tags:
+      - Monitors
+      summary: Status
+      description: Get the latest status of a monitor. Will return a 404 if the monitor has not yet been run and modeled
+      operationId: getMonitorStatus2
+      parameters:
+      - name: monitorId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MonitorStatusResultV2'
+  /v1/monitors/import-historic/{monitorId}:
+    post:
+      tags:
+      - Monitors
+      summary: Import Historic Data
+      description: Import historic data for the monitor. Full documentation at https://docs.metaplane.dev/docs/importing-historical-data#limitations.
+        Setting `isPreview` to  true will validate the import without actually inserting data.
+      operationId: importHistoricDataForMonitor
+      parameters:
+      - name: monitorId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportHistoricDataRequest'
+        required: false
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicImportResult'
+  /v1/monitors/ingest-datapoint/{monitorId}:
+    post:
+      tags:
+      - Monitors
+      summary: Ingest Datapoint
+      description: Sends a datapoint to add to the target monitorId with the current timestamp and then modeled. In private
+        Beta, reach out for access.
+      operationId: ingestDataPoint
+      parameters:
+      - name: monitorId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicSeriesPoint'
+        required: false
+      responses:
+        '200':
+          description: Success
+  /v1/monitors/run:
+    post:
+      tags:
+      - Monitors
+      summary: Run
+      description: Enqueue a list of existing monitors to be immediately run. Note that a success here just means that we
+        have enqueued the monitors to be run, not that they have finished running
+      operationId: runMonitors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RunMonitorsRequest'
+        required: false
+      responses:
+        '200':
+          description: Success
 components:
+  schemas:
+    AnnotatedPoint:
+      type: object
+      properties:
+        annotationType:
+          type: string
+          enum:
+          - FALSE_POSITIVE
+          - FALSE_NEGATIVE
+          - EXPECTED_OCCASIONALLY
+          - NEW_BASELINE
+          - TRUE_POSITIVE
+        annotatedTimestamp:
+          type: string
+          format: date-time
+        annotatingUserEmail:
+          type: string
+      description: Optional annotation that was applied to this specific datapoint
+      nullable: true
+    BulkFetchMonitorTablesRequest:
+      type: object
+      properties:
+        tablePaths:
+          uniqueItems: true
+          type: array
+          description: 'Set of table path string in format of: {database}.{schema}.{table}'
+          items:
+            type: string
+            description: 'Set of table path string in format of: {database}.{schema}.{table}'
+    EvaluationHistoryRequest:
+      type: object
+      properties:
+        groupings:
+          uniqueItems: true
+          type: array
+          description: Optional, only needed if you want the history for a specific group of a group by monitor
+          nullable: true
+          items:
+            $ref: '#/components/schemas/LabelNameValue'
+        createdAt:
+          type: string
+          description: Leaving empty gets starts at the most recent evaluation
+          format: date-time
+          nullable: true
+        sortOrder:
+          type: string
+          default: DESC
+          enum:
+          - ASC
+          - DESC
+        limit:
+          type: integer
+          description: How many records to return. Max number per page is 500
+          format: int32
+          nullable: true
+          default: 500
+    ImportHistoricDataRequest:
+      type: object
+      properties:
+        dataPoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicSeriesPointWithTimestamp'
+        isPreview:
+          type: boolean
+          description: Optional flag to allow previewing what the result of the import would be. Setting to true will validate
+            the import without actually inserting data
+          nullable: true
+          default: false
+    LabelNameValue:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+    MonitorConfig:
+      type: object
+      properties:
+        customSql:
+          type: string
+          nullable: true
+        customMetricUnitType:
+          type: string
+          description: Overrides the display type in the metaplane UI. Default to float if not specified. Only applies to
+            custom sql monitors
+          nullable: true
+          enum:
+          - INT
+          - FLOAT
+          - PERCENT
+          - SECOND
+          - BYTE
+          - MILLISECOND
+        incrementalClause:
+          $ref: '#/components/schemas/PublicIncrementalClause'
+        customWhereClause:
+          type: string
+          nullable: true
+        alertRule:
+          $ref: '#/components/schemas/PublicAlertRule'
+        groupByColumns:
+          type: array
+          description: List of columns to group query by
+          nullable: true
+          items:
+            type: string
+            description: List of columns to group query by
+            nullable: true
+        timeZone:
+          type: string
+          description: 'Timezone identifier like: America/New_York'
+          nullable: true
+      nullable: true
+    MonitorEgg:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - ROW_COUNT
+          - COLUMN_COUNT
+          - CARDINALITY
+          - UNIQUENESS
+          - NULLNESS
+          - PERCENT_ZERO
+          - PERCENT_NEGATIVE
+          - MIN
+          - MAX
+          - MEAN
+          - STDDEV
+          - FRESHNESS
+          - CUSTOM
+          - PUSH
+          - SUM
+          - DURATION
+          - GENERIC_OBJECT
+        cronTab:
+          type: string
+        config:
+          $ref: '#/components/schemas/MonitorConfig'
+        connectionId:
+          type: string
+          format: uuid
+        entityType:
+          type: string
+          enum:
+          - TABLE
+          - COLUMN
+          - DATABASE
+          - SCHEMA
+        absolutePathString:
+          type: string
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+    MonitorGrouping:
+      type: object
+      properties:
+        groupings:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelNameValue'
+      description: List of all groups that have seen at least one datapoint for this monitor
+      nullable: true
+    MonitorListResult:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicMonitor'
+    MonitorStatus:
+      type: object
+      properties:
+        result:
+          type: number
+          format: double
+          nullable: true
+        lowerBound:
+          type: number
+          format: double
+          nullable: true
+        upperBound:
+          type: number
+          format: double
+          nullable: true
+        predicted:
+          type: number
+          format: double
+          nullable: true
+        passed:
+          type: boolean
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+          nullable: true
+          enum:
+          - PASS
+          - FAIL
+          - IN_TRAINING
+          - FAILED_TO_PREDICT
+          - NOT_ENOUGH_DATA
+          - ERROR
+          - INVALID_INPUT
+        openRelatedIncidents:
+          uniqueItems: true
+          type: array
+          description: A list of currently active incidents
+          items:
+            type: integer
+            description: A list of currently active incidents
+            format: int64
+        errorMessage:
+          type: string
+          description: Error message if the latest evaluation is failed
+          nullable: true
+        annotation:
+          $ref: '#/components/schemas/AnnotatedPoint'
+    MonitorStatusResultV2:
+      type: object
+      properties:
+        statuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/SeriesStatus'
+        isErrored:
+          type: boolean
+          description: Flag set to true if the group by query itself failed to run
+        timestamp:
+          type: string
+          format: date-time
+        errorMessage:
+          type: string
+          description: Error message if the latest evaluation is failed
+          nullable: true
+    MonitorUpdate:
+      type: object
+      properties:
+        isEnabled:
+          type: boolean
+        cronTab:
+          type: string
+        config:
+          $ref: '#/components/schemas/MonitorConfig'
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+    PublicAlertRule:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - ANOMALY
+          - MANUAL
+        numFailuresBeforeAlert:
+          type: integer
+          description: Number of time a monitor can fail before an incident is created
+          format: int32
+          nullable: true
+      description: Optional alert rule configuration. Defaults to ANOMALY
+      nullable: true
+      discriminator:
+        propertyName: type
+        mapping:
+          MANUAL: '#/components/schemas/PublicManualThresholdRule'
+          ANOMALY: '#/components/schemas/PublicAnomalyAlertRule'
+      oneOf:
+      - $ref: '#/components/schemas/PublicAnomalyAlertRule'
+      - $ref: '#/components/schemas/PublicManualThresholdRule'
+    PublicAnomalyAlertRule:
+      type: object
+      properties:
+        sensitivity:
+          type: number
+          description: 'Control the bounds of the model. The default value is 3.0.
+
+            0.3 high is the highest sensitivity correlating with smallest bounds.
+
+            6.0 Is lowest sensitivity corresponding with the largest bounds.
+
+            '
+          format: double
+          default: 3
+        monitorTypeOverride:
+          type: string
+          enum:
+          - ROW_COUNT
+          - COLUMN_COUNT
+          - CARDINALITY
+          - UNIQUENESS
+          - NULLNESS
+          - PERCENT_ZERO
+          - PERCENT_NEGATIVE
+          - MIN
+          - MAX
+          - MEAN
+          - STDDEV
+          - FRESHNESS
+          - CUSTOM
+          - PUSH
+          - SUM
+          - DURATION
+          - GENERIC_OBJECT
+        modelClassType:
+          type: string
+          enum:
+          - STATIONARY
+          - NONE
+        modelBoundsOverride:
+          type: string
+          description: Flags to completely override part of the model bounds
+          nullable: true
+          enum:
+          - UPPER_ONLY
+          - LOWER_ONLY
+        minLowerBoundSize:
+          type: number
+          description: 'Controls the minimum size for the lower bound of the models predictive range
+
+            '
+          format: double
+          nullable: true
+          default: 3
+        minUpperBoundSize:
+          type: number
+          description: 'Controls the minimum size for the upper bound of the models predictive range
+
+            '
+          format: double
+          nullable: true
+          default: 3
+    PublicImportResult:
+      type: object
+      properties:
+        totalDataPoints:
+          type: integer
+          format: int32
+        totalValidDataPoints:
+          type: integer
+          format: int32
+        groupByValues:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        filterReasonCounts:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int64
+    PublicIncrementalClause:
+      type: object
+      properties:
+        columnName:
+          type: string
+        duration:
+          $ref: '#/components/schemas/TimeDuration'
+      nullable: true
+    PublicManualThreshold:
+      type: object
+      properties:
+        operatorType:
+          type: string
+          enum:
+          - GREATER_THAN
+          - GREATER_THAN_EQUALS
+          - LESS_THAN
+          - LESS_THAN_EQUALS
+          - EQUAL
+          - NOT_EQUAL
+        value:
+          type: number
+          format: double
+    PublicManualThresholdRule:
+      type: object
+      properties:
+        thresholds:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicManualThreshold'
+    PublicMonitor:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+          - ROW_COUNT
+          - COLUMN_COUNT
+          - CARDINALITY
+          - UNIQUENESS
+          - NULLNESS
+          - PERCENT_ZERO
+          - PERCENT_NEGATIVE
+          - MIN
+          - MAX
+          - MEAN
+          - STDDEV
+          - FRESHNESS
+          - CUSTOM
+          - PUSH
+          - SUM
+          - DURATION
+          - GENERIC_OBJECT
+        genericObjectSubtype:
+          type: string
+        valueType:
+          type: string
+          enum:
+          - METRIC
+          - SOURCE_TO_TARGET
+        cronTab:
+          type: string
+        name:
+          type: string
+          nullable: true
+        description:
+          type: string
+          nullable: true
+        isEnabled:
+          type: boolean
+        config:
+          $ref: '#/components/schemas/MonitorConfig'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        absolutePath:
+          type: string
+        entityType:
+          type: string
+        connectionId:
+          type: string
+          format: uuid
+        monitorTags:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        monitorGroups:
+          type: array
+          description: List of all groups that have seen at least one datapoint for this monitor
+          nullable: true
+          items:
+            $ref: '#/components/schemas/MonitorGrouping'
+    PublicSeriesPoint:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+        groups:
+          type: object
+          additionalProperties:
+            type: string
+            description: Each key is a group name and each value should be the group by value. Omit the monitor has no groups
+            nullable: true
+          description: Each key is a group name and each value should be the group by value. Omit the monitor has no groups
+          nullable: true
+    PublicSeriesPointWithTimestamp:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+        groups:
+          type: object
+          additionalProperties:
+            type: string
+            description: Each key is a group name and each value should be the group by value. Omit the monitor has no groups
+            nullable: true
+          description: Each key is a group name and each value should be the group by value. Omit the monitor has no groups
+          nullable: true
+        timestamp:
+          type: string
+          description: ISO 8601 date time offset e.g. 2023‐09‐07T06:18:56−07:00 or 2023‐09‐07T13:18:56Z
+          format: date-time
+    RunMonitorsRequest:
+      type: object
+      properties:
+        testIds:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            format: uuid
+    SeriesStatus:
+      type: object
+      properties:
+        result:
+          type: number
+          format: double
+          nullable: true
+        lowerBound:
+          type: number
+          format: double
+          nullable: true
+        upperBound:
+          type: number
+          format: double
+          nullable: true
+        status:
+          type: string
+          enum:
+          - PASS
+          - FAIL
+          - IN_TRAINING
+          - FAILED_TO_PREDICT
+          - NOT_ENOUGH_DATA
+          - ERROR
+          - INVALID_INPUT
+        groups:
+          uniqueItems: true
+          type: array
+          description: The distinct set of key-value labels that identify this group. An empty set means it is the default
+            group
+          items:
+            $ref: '#/components/schemas/LabelNameValue'
+        openRelatedIncidents:
+          uniqueItems: true
+          type: array
+          description: A list of currently active incidents
+          items:
+            type: integer
+            description: A list of currently active incidents
+            format: int64
+    TimeDuration:
+      type: object
+      properties:
+        days:
+          type: integer
+          format: int64
+        hours:
+          type: integer
+          format: int64
+        minutes:
+          type: integer
+          format: int64
   securitySchemes:
-    apiKeyAuth:
+    Authorization:
       type: apiKey
-      in: header
+      description: Copy in your API key generated from metaplane
       name: Authorization
-      description: Metaplane API key
+      in: header
+x-api-evangelist:
+  harvested: '2026-08-29'
+  method: searched
+  source: Split by tag from openapi/_original/metaplane-api-openapi.yml, itself the union of the 23 OpenAPI documents Metaplane
+    publishes at https://docs.metaplane.dev/reference/<operation>.md

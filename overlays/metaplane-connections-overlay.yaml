@@ -1,0 +1,34 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements — Metaplane Connections API
+  version: 1.0.0
+extends: ../openapi/metaplane-connections-api-openapi.yml
+x-api-evangelist:
+  generated: '2026-08-29'
+  method: generated
+  source: Enhancements API Evangelist applies on top of Metaplane's published contract. The original spec is never
+    mutated.
+  note: 'Every action below records something the provider''s own document does not state. The deprecation action
+    is the load-bearing one: Metaplane marks getMonitorStatus as deprecated in its human-readable summary text only,
+    so no machine reading the contract can see it.'
+actions:
+- target: $.info
+  description: Record the real, callable production base and the provenance of this contract.
+  update:
+    x-api-evangelist-base-url: https://dev.api.metaplane.dev
+    x-api-evangelist-base-note: 'The provider''s own published spec names https://dev.api.metaplane.dev on every
+      operation, and it is the host that answers: GET /v1/connections returns 401 (auth required) there, while https://api.metaplane.dev/v1/connections
+      returns 404. The ''dev.'' prefix is the production host despite the name.'
+    x-api-evangelist-source: https://docs.metaplane.dev/reference/<operation>.md
+    x-api-evangelist-harvested: '2026-08-29'
+- target: $.components.securitySchemes.Authorization
+  description: The docs specify a Bearer prefix that the apiKey scheme cannot express.
+  update:
+    x-api-evangelist-note: 'https://docs.metaplane.dev/reference/getting-started documents the header as ''Authorization:
+      Bearer <YOUR_SECRET_API_TOKEN>''. Modelled here as apiKey, so a generator reading only this contract will
+      omit the ''Bearer '' prefix. http/bearer would be the accurate scheme.'
+- target: $.paths..responses
+  description: Flag the absent error contract.
+  update:
+    x-api-evangelist-note: The published contract declares only 200 responses. See errors/metaplane-problem-types.yml
+      for the two failure modes Metaplane documents in prose.

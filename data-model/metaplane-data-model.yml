@@ -1,0 +1,425 @@
+generated: '2026-08-29'
+method: derived
+source: openapi/_original/metaplane-api-openapi.yml — 37 component schemas from the provider's own published OpenAPI
+provider: Metaplane
+providerId: metaplane
+note: 'Entity-relationship graph derived from $ref links and id-reference fields in the published contract. Core
+  spine: a Connection (a warehouse, BI tool or dbt project) owns PublicMonitors; each PublicMonitor carries a MonitorConfig
+  with an alert rule, produces MonitorStatus evaluations over time, and can be labelled with PublicTagDefinitions.
+  Identifiers are bare UUIDs with no type prefix, so an agent cannot tell a monitorId from a connectionId by inspection
+  — the docs publish no id-prefix scheme.'
+root_entities:
+- Connection
+- PublicMonitor
+- MonitorStatus
+- PublicTagDefinition
+- PublicEntity
+identifier_scheme:
+  style: bare UUID
+  prefixed: false
+  fields:
+  - - Connection
+    - id
+  - - ConnectionSyncStatusResult
+    - connectionId
+  - - MonitorEgg
+    - connectionId
+  - - PublicMonitor
+    - connectionId
+  - - PublicMonitor
+    - id
+  - - RemoveMonitorTagsRequest
+    - monitorId
+  - - RemoveTableTagsRequest
+    - connectionId
+  - - TagTablesRequest
+    - connectionId
+  note: 'tagId is the exception: an int64, not a UUID.'
+entity_count: 37
+entities:
+- name: AnnotatedPoint
+  fields:
+  - annotatedTimestamp
+  - annotatingUserEmail
+  - annotationType
+  field_count: 3
+  relationships: []
+  identifier: null
+- name: BulkFetchMonitorTablesRequest
+  fields:
+  - tablePaths
+  field_count: 1
+  relationships: []
+  identifier: null
+- name: Connection
+  fields:
+  - createdAt
+  - id
+  - isEnabled
+  - name
+  - status
+  - type
+  - updatedAt
+  field_count: 7
+  relationships: []
+  identifier: id
+- name: ConnectionSyncStatusResult
+  fields:
+  - connectionId
+  - errorMessage
+  - status
+  - timestamp
+  field_count: 4
+  relationships:
+  - type: belongs_to
+    target: Connection
+    via: connectionId
+  identifier: null
+- name: EvaluationHistoryRequest
+  fields:
+  - createdAt
+  - groupings
+  - limit
+  - sortOrder
+  field_count: 4
+  relationships:
+  - type: has_many
+    target: LabelNameValue
+    via: groupings
+  identifier: null
+- name: ImportHistoricDataRequest
+  fields:
+  - dataPoints
+  - isPreview
+  field_count: 2
+  relationships:
+  - type: has_many
+    target: PublicSeriesPointWithTimestamp
+    via: dataPoints
+  identifier: null
+- name: LabelNameValue
+  fields:
+  - name
+  - value
+  field_count: 2
+  relationships: []
+  identifier: null
+- name: MonitorConfig
+  fields:
+  - alertRule
+  - customMetricUnitType
+  - customSql
+  - customWhereClause
+  - groupByColumns
+  - incrementalClause
+  - timeZone
+  field_count: 7
+  relationships:
+  - type: has_one
+    target: PublicIncrementalClause
+    via: incrementalClause
+  - type: has_one
+    target: PublicAlertRule
+    via: alertRule
+  identifier: null
+- name: MonitorEgg
+  fields:
+  - absolutePathString
+  - config
+  - connectionId
+  - cronTab
+  - description
+  - entityType
+  - name
+  - type
+  field_count: 8
+  relationships:
+  - type: has_one
+    target: MonitorConfig
+    via: config
+  - type: belongs_to
+    target: Connection
+    via: connectionId
+  identifier: null
+- name: MonitorGrouping
+  fields:
+  - groupings
+  field_count: 1
+  relationships:
+  - type: has_many
+    target: LabelNameValue
+    via: groupings
+  identifier: null
+- name: MonitorListResult
+  fields:
+  - data
+  field_count: 1
+  relationships:
+  - type: has_many
+    target: PublicMonitor
+    via: data
+  identifier: null
+- name: MonitorStatus
+  fields:
+  - annotation
+  - createdAt
+  - errorMessage
+  - lowerBound
+  - openRelatedIncidents
+  - passed
+  - predicted
+  - result
+  - status
+  - upperBound
+  field_count: 10
+  relationships:
+  - type: has_one
+    target: AnnotatedPoint
+    via: annotation
+  identifier: null
+- name: MonitorStatusResultV2
+  fields:
+  - errorMessage
+  - isErrored
+  - statuses
+  - timestamp
+  field_count: 4
+  relationships:
+  - type: has_many
+    target: SeriesStatus
+    via: statuses
+  identifier: null
+- name: MonitorUpdate
+  fields:
+  - config
+  - cronTab
+  - description
+  - isEnabled
+  - name
+  field_count: 5
+  relationships:
+  - type: has_one
+    target: MonitorConfig
+    via: config
+  identifier: null
+- name: PublicAlertRule
+  fields:
+  - numFailuresBeforeAlert
+  - type
+  field_count: 2
+  relationships: []
+  identifier: null
+- name: PublicAnomalyAlertRule
+  fields:
+  - minLowerBoundSize
+  - minUpperBoundSize
+  - modelBoundsOverride
+  - modelClassType
+  - monitorTypeOverride
+  - sensitivity
+  field_count: 6
+  relationships: []
+  identifier: null
+- name: PublicEntity
+  fields:
+  - absolutePath
+  - type
+  field_count: 2
+  relationships: []
+  identifier: null
+- name: PublicImportResult
+  fields:
+  - filterReasonCounts
+  - groupByValues
+  - totalDataPoints
+  - totalValidDataPoints
+  field_count: 4
+  relationships: []
+  identifier: null
+- name: PublicIncrementalClause
+  fields:
+  - columnName
+  - duration
+  field_count: 2
+  relationships:
+  - type: has_one
+    target: TimeDuration
+    via: duration
+  identifier: null
+- name: PublicManualThreshold
+  fields:
+  - operatorType
+  - value
+  field_count: 2
+  relationships: []
+  identifier: null
+- name: PublicManualThresholdRule
+  fields:
+  - thresholds
+  field_count: 1
+  relationships:
+  - type: has_many
+    target: PublicManualThreshold
+    via: thresholds
+  identifier: null
+- name: PublicMonitor
+  fields:
+  - absolutePath
+  - config
+  - connectionId
+  - createdAt
+  - cronTab
+  - description
+  - entityType
+  - genericObjectSubtype
+  - id
+  - isEnabled
+  - monitorGroups
+  - monitorTags
+  - name
+  - type
+  - updatedAt
+  - valueType
+  field_count: 16
+  relationships:
+  - type: has_one
+    target: MonitorConfig
+    via: config
+  - type: belongs_to
+    target: Connection
+    via: connectionId
+  - type: has_many
+    target: MonitorGrouping
+    via: monitorGroups
+  identifier: id
+- name: PublicSeriesPoint
+  fields:
+  - groups
+  - value
+  field_count: 2
+  relationships: []
+  identifier: null
+- name: PublicSeriesPointWithTimestamp
+  fields:
+  - groups
+  - timestamp
+  - value
+  field_count: 3
+  relationships: []
+  identifier: null
+- name: PublicTagDefinition
+  fields:
+  - createdAt
+  - name
+  - tagId
+  field_count: 3
+  relationships: []
+  identifier: tagId
+- name: RemoveMonitorTagsRequest
+  fields:
+  - monitorId
+  - tagNames
+  field_count: 2
+  relationships:
+  - type: belongs_to
+    target: PublicMonitor
+    via: monitorId
+  identifier: null
+- name: RemoveTableTagsRequest
+  fields:
+  - absoluteTablePath
+  - connectionId
+  - tagNames
+  field_count: 3
+  relationships:
+  - type: belongs_to
+    target: Connection
+    via: connectionId
+  identifier: null
+- name: RunMonitorsRequest
+  fields:
+  - testIds
+  field_count: 1
+  relationships: []
+  identifier: null
+- name: SeriesStatus
+  fields:
+  - groups
+  - lowerBound
+  - openRelatedIncidents
+  - result
+  - status
+  - upperBound
+  field_count: 6
+  relationships:
+  - type: has_many
+    target: LabelNameValue
+    via: groups
+  identifier: null
+- name: TagDefinitionRequest
+  fields:
+  - names
+  field_count: 1
+  relationships: []
+  identifier: null
+- name: TagMonitorsRequest
+  fields:
+  - monitorIds
+  - tagName
+  field_count: 2
+  relationships: []
+  identifier: null
+- name: TagMonitorsResult
+  fields:
+  - notFoundMonitors
+  - successfullyTaggedMonitors
+  field_count: 2
+  relationships: []
+  identifier: null
+- name: TagTablesRequest
+  fields:
+  - absoluteTablePaths
+  - connectionId
+  - tagName
+  field_count: 3
+  relationships:
+  - type: belongs_to
+    target: Connection
+    via: connectionId
+  identifier: null
+- name: TagTablesResult
+  fields:
+  - notFoundTablePaths
+  - successfullyTaggedTablePaths
+  field_count: 2
+  relationships: []
+  identifier: null
+- name: TaggedObjectResponse
+  fields:
+  - data
+  - hasMore
+  - nextPageToken
+  field_count: 3
+  relationships:
+  - type: has_many
+    target: PublicEntity
+    via: data
+  identifier: null
+- name: TimeDuration
+  fields:
+  - days
+  - hours
+  - minutes
+  field_count: 3
+  relationships: []
+  identifier: null
+- name: UpdatePrivateKeyRequest
+  fields:
+  - privateKey
+  - privateKeyPassphrase
+  field_count: 2
+  relationships: []
+  identifier: null
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

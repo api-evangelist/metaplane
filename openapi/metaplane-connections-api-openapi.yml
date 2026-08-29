@@ -1,87 +1,187 @@
-openapi: 3.1.0
+openapi: 3.0.1
 info:
   title: Metaplane Connections API
-  description: 'Metaplane is a data observability platform providing automated anomaly
-
-    detection and data quality monitoring. The REST API exposes operations
-
-    over connections, monitors, monitor evaluations, datapoints, and tags.
-
-    '
+  description: 'The Connections API from Metaplane — 4 operation(s) for connections. Data observability: automated anomaly
+    detection and data quality monitoring.'
   version: '1.0'
   contact:
     name: Metaplane
-    url: https://docs.metaplane.dev/
+    url: https://docs.metaplane.dev/reference/getting-started
 servers:
-- url: https://api.metaplane.dev
-  description: Production API
+- url: https://dev.api.metaplane.dev
 security:
-- apiKeyAuth: []
+- Authorization: []
 tags:
 - name: Connections
 paths:
-  /getallconnections:
+  /v1/connections:
     get:
       tags:
       - Connections
-      summary: List all connections
+      summary: List all
+      description: List all connections
+      operationId: getAllConnections
+      parameters:
+      - name: includeDeleted
+        in: query
+        schema:
+          type: boolean
       responses:
         '200':
-          description: Connection list
-  /getconnectionstatus:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Connection'
+  /v1/connections/{connectionId}/sync/status:
     get:
       tags:
       - Connections
-      summary: Get current sync status of a connection
+      summary: Sync status
+      description: Get the current sync status of a connection
+      operationId: getConnectionStatus
       parameters:
-      - in: query
-        name: connectionId
+      - name: connectionId
+        in: path
         required: true
         schema:
           type: string
+          format: uuid
       responses:
         '200':
-          description: Connection status
-  /syncconnection:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectionSyncStatusResult'
+  /v1/connections/{connectionId}/sync:
     post:
       tags:
       - Connections
-      summary: Initiate connection re-sync
-      requestBody:
+      summary: Sync
+      description: Kicks of a task to re-sync the connection. Please note that this method returning 200 does not means the
+        connection has finished syncing. You can poll the connection status api to determine when the sync has finished
+      operationId: syncConnection
+      parameters:
+      - name: connectionId
+        in: path
         required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                connectionId:
-                  type: string
+        schema:
+          type: string
+          format: uuid
       responses:
-        '202':
-          description: Sync initiated
-  /updateprivatekey:
+        '200':
+          description: Success
+  /v1/connections/{connectionId}/update-private-key:
     post:
       tags:
       - Connections
-      summary: Update connection private key
-      requestBody:
+      summary: Update private key
+      description: Updates the private key for a connection to the newly passed in value.
+      operationId: updatePrivateKey
+      parameters:
+      - name: connectionId
+        in: path
         required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                connectionId:
-                  type: string
-                privateKey:
-                  type: string
+              $ref: '#/components/schemas/UpdatePrivateKeyRequest'
+        required: false
       responses:
         '200':
-          description: Updated
+          description: Success
 components:
+  schemas:
+    Connection:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        type:
+          type: string
+          enum:
+          - AIRFLOW
+          - BIGQUERY
+          - CLICKHOUSE
+          - DBT
+          - DBT_CORE
+          - LOOKER
+          - METABASE
+          - MODE
+          - MYSQL
+          - POSTGRES
+          - REDSHIFT
+          - SIGMA
+          - SNOWFLAKE
+          - SNOWFLAKE_DATA_APP
+          - TABLEAU
+          - SQLSERVER
+          - POWERBI
+          - FIVETRAN
+          - DATABRICKS
+          - DATABRICKS_HMS
+          - CENSUS
+          - HIGHTOUCH
+          - SEGMENT
+          - AIRBYTE
+          - HEX
+          - USER_DEFINED
+        isEnabled:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DELETED
+    ConnectionSyncStatusResult:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - STARTED
+          - SUCCEEDED
+          - ERRORED
+        errorMessage:
+          type: string
+        connectionId:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+    UpdatePrivateKeyRequest:
+      type: object
+      properties:
+        privateKey:
+          type: string
+        privateKeyPassphrase:
+          type: string
+          nullable: true
   securitySchemes:
-    apiKeyAuth:
+    Authorization:
       type: apiKey
-      in: header
+      description: Copy in your API key generated from metaplane
       name: Authorization
-      description: Metaplane API key
+      in: header
+x-api-evangelist:
+  harvested: '2026-08-29'
+  method: searched
+  source: Split by tag from openapi/_original/metaplane-api-openapi.yml, itself the union of the 23 OpenAPI documents Metaplane
+    publishes at https://docs.metaplane.dev/reference/<operation>.md

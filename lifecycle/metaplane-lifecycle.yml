@@ -1,0 +1,62 @@
+generated: '2026-08-29'
+method: searched
+source: https://docs.metaplane.dev/reference/getmonitorstatus, https://status.metaplane.dev, https://www.metaplane.dev/blog/metaplane-by-datadog,
+  openapi/_original/metaplane-api-openapi.yml
+provider: Metaplane
+providerId: metaplane
+versioning:
+  scheme: path-prefix
+  current: v1 (with v2 for two operations)
+  evidence: Every path is prefixed /v1/ except /v2/monitors/status/{monitorId} and /v2/monitors/bulk-fetch/tables/{connectionId}.
+    info.version in the published spec is a flat "1.0" and does not track the path version.
+  policy_published: false
+  note: No written versioning policy exists. There is no page documenting how versions are introduced, supported
+    or retired.
+deprecation:
+  policy_published: false
+  headers:
+    sunset: false
+    deprecation: false
+    rfc8594: false
+    note: No Sunset or Deprecation response header is declared in the OpenAPI or mentioned in the docs.
+  deprecated_operations:
+  - operationId: getMonitorStatus
+    method: GET
+    path: /v1/monitors/status/{monitorId}
+    signal: The published summary is literally 'Status (deprecated)'.
+    spec_flag: false
+    replacement:
+      operationId: getMonitorStatus2
+      method: GET
+      path: /v2/monitors/status/{monitorId}
+    sunset_date: null
+    note: 'HONEST GAP WORTH NAMING: the operation is marked deprecated in its human-readable SUMMARY TEXT only.
+      The OpenAPI operation object carries no `deprecated: true` flag, so every machine reading the contract — SDK
+      generators, agents, linters — sees a fully supported operation. A one-line spec change would fix it.'
+sla:
+  published: false
+  note: No public SLA document. The pricing page attaches 'Premium support, Shared Slack channel, CSM, and engineering
+    time' to Enterprise, with email support on Free and Pro, but states no uptime commitment.
+status_page:
+  url: https://status.metaplane.dev
+  platform: Atlassian Statuspage
+  status: 200
+  aliases:
+  - https://metaplane.statuspage.io
+  probed: '2026-08-29'
+changelog:
+  url: https://www.metaplane.dev/changelog
+  status: 200
+  note: Webflow CMS page; entries render client-side and are also syndicated under https://www.metaplane.dev/blog/category/changelog.
+corporate:
+  event: Acquired by Datadog
+  announced: '2025-04-23'
+  source: https://www.metaplane.dev/blog/metaplane-by-datadog
+  note: 'Metaplane announced its acquisition by Datadog on 2025-04-23. As of this probe (2026-08-29) metaplane.dev
+    still operates as a standalone product surface — pricing, self-serve signup, docs, status page and the API are
+    all live, and a site-wide banner reads ''Metaplane and Datadog join forces''. But the signal to watch is publishing
+    cadence: the blog RSS (100 items) ends at the acquisition announcement itself on 2025-04-23 and every API reference
+    page carries updatedAt 2025-05-19. Nothing has been published on either surface in roughly sixteen months.'
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

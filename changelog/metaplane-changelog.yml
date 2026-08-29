@@ -1,0 +1,56 @@
+generated: '2026-08-29'
+method: searched
+source: https://www.metaplane.dev/changelog + https://www.metaplane.dev/blog/rss.xml (100 items, fetched 2026-08-29)
+provider: Metaplane
+providerId: metaplane
+url: https://www.metaplane.dev/changelog
+status: 200
+scheme: dated product-update posts (no semantic version numbers)
+current_version: null
+note: 'Metaplane runs a product changelog at /changelog and syndicates it under /blog/category/changelog. Both are
+  Webflow CMS pages whose entries render client-side, so the dated entries below are read from the blog RSS feed,
+  which is the machine-readable form of the same stream. IMPORTANT: the feed''s most recent item is the Datadog
+  acquisition announcement dated 2025-04-23 — there is no entry after it, so this is not a recent window, it is
+  the whole tail. The changelog is API-agnostic product news; no entry in the feed announces an API change.'
+api_specific: false
+entries:
+- date: '2025-04-23'
+  title: Metaplane by Datadog
+  breaking: false
+  url: https://www.metaplane.dev/blog/metaplane-by-datadog
+  highlights:
+  - Acquisition by Datadog announced
+- date: '2025-04-23'
+  title: 'Metaplane by Datadog: FAQ'
+  breaking: false
+  url: https://www.metaplane.dev/blog/metaplane-by-datadog-faq
+  highlights:
+  - Customer FAQ on the acquisition
+- date: '2025-02-26'
+  title: Full coverage of critical tables in just a few clicks
+  breaking: false
+  url: https://www.metaplane.dev/blog/full-coverage-of-critical-tables
+- date: '2025-02-07'
+  title: Dashboards, source-to-target, and other improvements
+  breaking: false
+  url: https://www.metaplane.dev/blog/dashboards-source-to-target-and-other-improvements
+- date: '2024-12-19'
+  title: Smarter anomaly detection
+  breaking: false
+  url: https://www.metaplane.dev/blog/smarter-anomaly-detection
+- date: '2024-12-17'
+  title: Announcing GitLab support for CI/CD
+  breaking: false
+  url: https://www.metaplane.dev/blog/announcing-gitlab-support-for-ci-cd
+- date: '2024-12-11'
+  title: Introducing source-to-target monitoring
+  breaking: false
+  url: https://www.metaplane.dev/blog/introducing-source-to-target-monitoring
+- date: '2024-11-22'
+  title: 'Intelligent incident management: less noise, more control'
+  breaking: false
+  url: https://www.metaplane.dev/blog/intelligent-incident-management
+last_entry: '2025-04-23'
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

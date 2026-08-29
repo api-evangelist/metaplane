@@ -1,0 +1,41 @@
+generated: '2026-08-29'
+method: searched
+source: https://docs.metaplane.dev/docs/webhooks, https://docs.metaplane.dev/docs/alert-routing, https://docs.metaplane.dev/docs/incidents
+provider: Metaplane
+providerId: metaplane
+asyncapi_published: false
+note: 'Metaplane has a real event surface — outbound incident-alert webhooks with optional HMAC request signing
+  — but publishes NO AsyncAPI document and no event-payload schema. Searched docs.metaplane.dev/llms.txt (complete
+  published index), /asyncapi.yaml on every host, and the GitHub org; nothing. Nothing is fabricated here: the catalog
+  below records what the provider documents, which is the transport and the security model, not the payload shape.'
+transport: HTTPS POST to a customer-supplied URL
+configuration:
+  ui: https://app.metaplane.dev/settings/alerts
+  api: false
+  note: Webhook destinations are created in the web app only. There is no webhook or subscription operation in the
+    published REST API — the 23 operations cover connections, monitors and tags.
+security:
+  signing: optional HMAC request signatures
+  secret: a secret key issued by Metaplane at destination creation; shown once and rotatable
+  source: https://docs.metaplane.dev/docs/webhooks
+  note: The signature header name and canonical string are not published in the docs, so a consumer cannot implement
+    verification from the documentation alone.
+verification:
+  supported: true
+  how: The destination actions menu offers 'Verify', which sends a sample incident to the endpoint.
+routing:
+  source: https://docs.metaplane.dev/docs/alert-routing
+  note: Alerts are routed to destinations by rule; tags on tables and monitors are the primary routing dimension
+    (https://docs.metaplane.dev/docs/tags).
+events:
+- name: incident
+  description: An incident is raised when a monitor fails. Metaplane groups related failing monitors into a single
+    incident rather than alerting per monitor.
+  payload_schema_published: false
+  source: https://docs.metaplane.dev/docs/incidents
+availability:
+  note: 'The pricing comparison table lists ''API, Webhooks'' as alert destinations on the Enterprise tier only;
+    Free and Pro get Slack, Email, MS Teams (+PagerDuty on Pro). Source: https://www.metaplane.dev/pricing'
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

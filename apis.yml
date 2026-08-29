@@ -1,124 +1,255 @@
 aid: metaplane
 name: Metaplane
 description: >-
-  Metaplane is a data observability platform providing automated anomaly detection and data quality monitoring.
+  Metaplane is a data observability platform for data teams — automated anomaly detection, data quality
+  monitoring, column-level lineage, schema-change alerting and data CI/CD across Snowflake, BigQuery,
+  Redshift, Databricks, ClickHouse, Postgres, MySQL, SQL Server, S3, dbt, Airflow and the major BI tools.
+  Metaplane learns the normal behaviour of every monitored table with an ML model and raises grouped
+  incidents when volume, freshness, nullness, uniqueness, cardinality or a custom SQL metric drifts out
+  of bounds. It exposes a REST API of 23 operations over connections, monitors, monitor evaluations,
+  datapoint ingestion and tags, documented on a ReadMe developer portal, plus outbound incident webhooks
+  and a free local CLI for visualising dbt runs. Metaplane was acquired by Datadog in April 2025 and
+  continues to operate as a standalone product surface.
 type: Index
 deliveryModel:
-  model: unknown
+  model: saas
   open_source: false
-  commercial: false
+  commercial: true
   callable_host: true
-  label: Delivery model not determined — needs a product licence on record
-  confidence: low
+  label: Commercial SaaS — hosted, callable REST API behind a bearer token
+  confidence: high
   source:
   - openapi
-  generated: '2026-08-28'
+  - plans
+  - authentication
+  generated: '2026-08-29'
   method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
-  trial: false
+  trial: true
   try_now: true
   public: false
-  label: Freemium · Self-serve signup
+  label: Freemium · Self-serve signup · 14-day evaluation before choosing a plan
   confidence: high
   source:
   - plans
   - authentication
-  generated: '2026-07-22'
-  method: derived
+  generated: '2026-08-29'
+  method: searched
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/metaplane.png
 tags:
-  - AIOps
-  - Data Observability
+- AIOps
+- Data Observability
+- Data Quality
+- Anomaly Detection
+- Data Lineage
+- Monitoring
+- Analytics
+- Data Engineering
+- dbt
+- Snowflake
 url: >-
   https://raw.githubusercontent.com/api-evangelist/metaplane/refs/heads/main/apis.yml
 created: '2026-03-27'
-modified: '2026-03-27'
+modified: '2026-08-29'
 specificationVersion: '0.23'
 apis:
 - aid: metaplane:metaplane
-  name: Metaplane
+  name: Metaplane API
   description: >-
-    Metaplane is a data observability platform providing automated anomaly detection and data quality
-    monitoring.
-  humanURL: https://www.metaplane.dev
+    The Metaplane REST API — 23 operations over connections, monitors, monitor evaluations, datapoint
+    ingestion and tags. Bearer-token authenticated, versioned by path prefix (/v1 with /v2 for two
+    monitor operations), served from https://dev.api.metaplane.dev.
+  humanURL: https://docs.metaplane.dev/reference/getting-started
+  baseURL: https://dev.api.metaplane.dev
   tags:
   - AIOps
+  - Data Observability
   properties:
+  - type: OpenAPI
+    url: openapi/_original/metaplane-api-openapi.yml
   - type: Documentation
     url: https://docs.metaplane.dev
+  - type: APIReference
+    url: https://docs.metaplane.dev/reference/getting-started
+  - type: Authentication
+    url: authentication/metaplane-authentication.yml
+  - type: DataModel
+    url: data-model/metaplane-data-model.yml
+  - type: ErrorCatalog
+    url: errors/metaplane-problem-types.yml
+  - type: Conventions
+    url: conventions/metaplane-conventions.yml
+  - type: RateLimits
+    url: rate-limits/metaplane-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/metaplane-webhooks.yml
+  - type: MCPServer
+    url: mcp/metaplane-mcp.yml
 - aid: metaplane:metaplane-connections-api
   name: Metaplane Connections API
-  description: The Connections API from Metaplane — 4 operation(s) for connections.
-  humanURL: https://www.metaplane.dev
+  description: >-
+    The Connections API from Metaplane — 4 operations for listing warehouse, BI and dbt connections,
+    reading sync status, triggering a re-sync and rotating a connection private key.
+  humanURL: https://docs.metaplane.dev/reference/getallconnections
+  baseURL: https://dev.api.metaplane.dev
   tags:
   - Connections
   properties:
   - type: OpenAPI
     url: openapi/metaplane-connections-api-openapi.yml
-- aid: metaplane:metaplane-datapoints-api
-  name: Metaplane Datapoints API
-  description: The Datapoints API from Metaplane — 1 operation(s) for datapoints.
-  humanURL: https://www.metaplane.dev
-  tags:
-  - Datapoints
-  properties:
-  - type: OpenAPI
-    url: openapi/metaplane-datapoints-api-openapi.yml
+  - type: Overlay
+    url: overlays/metaplane-connections-overlay.yaml
+  - type: AgentSkill
+    url: skills/metaplane-onboard-a-warehouse-connection.md
 - aid: metaplane:metaplane-monitors-api
   name: Metaplane Monitors API
-  description: The Monitors API from Metaplane — 10 operation(s) for monitors.
-  humanURL: https://www.metaplane.dev
+  description: >-
+    The Monitors API from Metaplane — 12 operations for creating, updating, running and reading data
+    quality monitors, their evaluation history and their status, plus historic-data import and
+    datapoint ingestion.
+  humanURL: https://docs.metaplane.dev/reference/createmonitor
+  baseURL: https://dev.api.metaplane.dev
   tags:
   - Monitors
   properties:
   - type: OpenAPI
     url: openapi/metaplane-monitors-api-openapi.yml
+  - type: Overlay
+    url: overlays/metaplane-monitors-overlay.yaml
+  - type: AgentSkill
+    url: skills/metaplane-create-and-verify-a-monitor.md
 - aid: metaplane:metaplane-tags-api
   name: Metaplane Tags API
-  description: The Tags API from Metaplane — 7 operation(s) for tags.
-  humanURL: https://www.metaplane.dev
+  description: >-
+    The Tags API from Metaplane — 7 operations for bulk-labelling tables and monitors, removing tags,
+    fetching tag definitions and reading tagged objects and monitors back. Tags are the routing
+    dimension for incident alerts.
+  humanURL: https://docs.metaplane.dev/reference/tagtables
+  baseURL: https://dev.api.metaplane.dev
   tags:
   - Tags
   properties:
   - type: OpenAPI
     url: openapi/metaplane-tags-api-openapi.yml
+  - type: Overlay
+    url: overlays/metaplane-tags-overlay.yaml
+  - type: AgentSkill
+    url: skills/metaplane-tag-and-triage-data-assets.md
 common:
-  - type: AgenticAccess
-    url: agentic-access/metaplane-agentic-access.yml
-  - type: TrustCenter
-    url: security/metaplane-trust-center.yml
-  - type: DomainSecurity
-    url: security/metaplane-domain-security.yml
-  - type: Authentication
-    url: authentication/metaplane-authentication.yml
-  - type: GitHubOrganization
-    url: https://github.com/metaplane
-  - type: LinkedIn
-    url: https://www.linkedin.com/company/metaplane
-  - type: Website
-    url: https://www.metaplane.dev
-  - type: Documentation
-    url: https://docs.metaplane.dev
-  - type: Integrations
-    url: https://www.metaplane.dev/integrations
-  - type: LlmsText
-    url: https://docs.metaplane.dev/llms.txt
-  - url: https://www.metaplane.dev/blog/rss.xml
-    type: Blog
+- type: Website
+  url: https://www.metaplane.dev
+- type: Documentation
+  url: https://docs.metaplane.dev
+- type: APIReference
+  url: https://docs.metaplane.dev/reference/getting-started
+- type: GettingStarted
+  url: https://docs.metaplane.dev/docs/setting-up-metaplane-for-the-first-time
+- type: Pricing
+  url: https://www.metaplane.dev/pricing
+- type: Plans
+  url: plans/metaplane-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/metaplane-rate-limits.yml
+- type: SignUp
+  url: https://www.metaplane.dev/signup
+- type: Login
+  url: https://www.metaplane.dev/login
+- type: Support
+  url: https://www.metaplane.dev/book-a-demo
+- type: Blog
+  url: https://www.metaplane.dev/blog/rss.xml
+- type: ChangeLog
+  url: https://www.metaplane.dev/changelog
+- type: ChangeLog
+  url: changelog/metaplane-changelog.yml
+- type: StatusPage
+  url: https://status.metaplane.dev
+- type: Lifecycle
+  url: lifecycle/metaplane-lifecycle.yml
+- type: TermsOfService
+  url: https://www.metaplane.dev/legal/terms
+- type: PrivacyPolicy
+  url: https://www.metaplane.dev/legal/privacy
+- type: GitHubOrganization
+  url: https://github.com/metaplane
+- type: LinkedIn
+  url: https://www.linkedin.com/company/metaplane
+- type: Integrations
+  url: https://www.metaplane.dev/integrations
+- type: LlmsText
+  url: https://docs.metaplane.dev/llms.txt
+- type: LLMsTxt
+  url: llms/metaplane-llms.txt
+- type: CLI
+  url: cli/metaplane-cli.yml
+- type: Packages
+  url: packages/metaplane-packages.yml
+- type: Authentication
+  url: authentication/metaplane-authentication.yml
+- type: Conventions
+  url: conventions/metaplane-conventions.yml
+- type: DataModel
+  url: data-model/metaplane-data-model.yml
+- type: ErrorCatalog
+  url: errors/metaplane-problem-types.yml
+- type: Conformance
+  url: conformance/metaplane-conformance.yml
+- type: Compliance
+  url: security/metaplane-trust-center.yml
+- type: TrustCenter
+  url: security/metaplane-trust-center.yml
+- type: DomainSecurity
+  url: security/metaplane-domain-security.yml
+- type: Webhooks
+  url: asyncapi/metaplane-webhooks.yml
+- type: MCPServer
+  url: mcp/metaplane-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: AgenticAccess
+  url: agentic-access/metaplane-agentic-access.yml
+- type: FinOps
+  url: finops/metaplane-finops.yml
 integrations:
-  - name: BigQuery
-  - name: Redshift
-  - name: Snowflake
-  - name: Airbyte
-  - name: Fivetran
-  - name: dbt Cloud
-  - name: MySQL
-  - name: Census
-  - name: Jira
-  - name: Airflow
-  - name: Looker
+- name: Snowflake
+- name: BigQuery
+- name: Redshift
+- name: Databricks
+- name: ClickHouse
+- name: Amazon S3
+- name: MySQL
+- name: PostgreSQL
+- name: SQL Server
+- name: Azure Synapse
+- name: dbt Cloud
+- name: dbt Core
+- name: Airbyte
+- name: Fivetran
+- name: Census
+- name: Hightouch
+- name: Segment
+- name: Airflow
+- name: Looker
+- name: Tableau
+- name: Metabase
+- name: Mode
+- name: PowerBI
+- name: Sigma
+- name: Hex
+- name: Slack
+- name: Microsoft Teams
+- name: PagerDuty
+- name: Jira
+- name: GitHub
+- name: GitLab
+- name: SAP S/4HANA
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com
+x-enrichment:
+  date: '2026-08-29'
+  status: enriched
+  artifacts_added: 19
+  pass: local-v1

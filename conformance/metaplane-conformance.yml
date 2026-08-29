@@ -1,0 +1,80 @@
+generated: '2026-08-29'
+method: searched
+source: https://docs.metaplane.dev/reference/getting-started, openapi/_original/metaplane-api-openapi.yml, https://www.metaplane.dev/security,
+  https://www.metaplane.dev/pricing
+provider: Metaplane
+providerId: metaplane
+standards:
+- id: openapi
+  conforms: true
+  version: 3.0.1
+  evidence: Metaplane publishes a complete OpenAPI 3.0.1 document for every one of its 23 API reference operations
+    on its own docs host (https://docs.metaplane.dev/reference/<operation>.md). Harvested to openapi/_original/metaplane-api-openapi.yml.
+- id: http-bearer
+  conforms: true
+  evidence: 'https://docs.metaplane.dev/reference/getting-started — ''This API uses token bearer based authentication'';
+    header form documented as ''Authorization: Bearer <YOUR_SECRET_API_TOKEN>''. The OpenAPI models it as an apiKey
+    scheme named Authorization in the header, so the spec under-declares what the docs state.'
+- id: oauth2
+  conforms: false
+  evidence: No oauth2 securityScheme in the OpenAPI; /.well-known/oauth-authorization-server 404s on every host.
+    SSO (Okta / AD / SAML) is an Enterprise product feature for the web app, not an API authorization flow.
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returns 404 on www, docs and dev.api hosts (2026-08-29).
+- id: rfc9457
+  conforms: false
+  evidence: The published OpenAPI declares only 200 responses across all 23 operations — no 4xx/5xx response objects
+    and no application/problem+json media type anywhere.
+- id: pagination
+  conforms: true
+  evidence: 'Two published styles: opaque cursor (fetchTaggedObjects — nextPageToken query param, TaggedObjectResponse
+    {data, nextPageToken, hasMore}) and timestamp cursor (getEvaluationHistory — createdAt + limit, max 500 per
+    page, stated in the operation description).'
+- id: idempotency
+  conforms: false
+  evidence: No Idempotency-Key header, no idempotency section in the docs, and no idempotency parameter on any of
+    the 16 write operations in the published spec.
+- id: webhooks
+  conforms: true
+  evidence: https://docs.metaplane.dev/docs/webhooks — outbound incident-alert webhooks with optional HMAC request
+    signing via a provider-issued secret key. Configured in-app, not via the public API.
+- id: json-api
+  conforms: false
+  evidence: 'Plain JSON envelopes; response bodies are bare arrays or {data: [...]} objects with no JSON:API media
+    type or document structure.'
+- id: scim
+  conforms: false
+  evidence: No SCIM schema URNs and no user-provisioning endpoints in the published spec; Enterprise SSO is listed
+    on the pricing page but no SCIM surface is documented.
+- id: odata
+  conforms: false
+  evidence: No $metadata surface. (The SAP S/4HANA integration doc references SAP's own OData APIs as a data SOURCE
+    Metaplane reads — it does not make Metaplane an OData provider.)
+- id: fhir
+  conforms: false
+  evidence: Not a healthcare data API.
+- id: fapi
+  conforms: false
+  evidence: Not a financial-grade API.
+domain_standard:
+  market: Data observability / data quality
+  declared: false
+  evidence: 'No domain standard is declared anywhere in the contract. The data-observability market has no ratified
+    interchange standard for monitors or incidents, and Metaplane''s monitor vocabulary (ROW_COUNT, FRESHNESS, NULLNESS,
+    CARDINALITY, STDDEV, …, enumerated in components.schemas.PublicAnomalyAlertRule.monitorTypeOverride) is proprietary.
+    The closest adjacent conventions Metaplane DOES speak are dbt''s model `meta` block for Monitors-as-Code (https://docs.metaplane.dev/docs/monitors-as-code)
+    and OpenLineage-adjacent column-level lineage, but neither is asserted in the API contract. Reward-only check:
+    recorded as absent, not penalised.'
+compliance:
+  certifications:
+  - SOC 2
+  - ISO 27001
+  - HIPAA
+  - GDPR
+  source: https://www.metaplane.dev/security
+  note: The pricing page's comparison table also lists 'SOC 2, GDPR, and HIPAA' as available on every tier including
+    Free.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
