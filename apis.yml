@@ -55,44 +55,11 @@ created: '2026-03-27'
 modified: '2026-08-29'
 specificationVersion: '0.23'
 apis:
-- aid: metaplane:metaplane
-  name: Metaplane API
-  description: >-
-    The Metaplane REST API — 23 operations over connections, monitors, monitor evaluations, datapoint
-    ingestion and tags. Bearer-token authenticated, versioned by path prefix (/v1 with /v2 for two
-    monitor operations), served from https://dev.api.metaplane.dev.
-  humanURL: https://docs.metaplane.dev/reference/getting-started
-  baseURL: https://dev.api.metaplane.dev
-  tags:
-  - AIOps
-  - Data Observability
-  properties:
-  - type: OpenAPI
-    url: openapi/_original/metaplane-api-openapi.yml
-  - type: Documentation
-    url: https://docs.metaplane.dev
-  - type: APIReference
-    url: https://docs.metaplane.dev/reference/getting-started
-  - type: Authentication
-    url: authentication/metaplane-authentication.yml
-  - type: DataModel
-    url: data-model/metaplane-data-model.yml
-  - type: ErrorCatalog
-    url: errors/metaplane-problem-types.yml
-  - type: Conventions
-    url: conventions/metaplane-conventions.yml
-  - type: RateLimits
-    url: rate-limits/metaplane-rate-limits.yml
-  - type: Webhooks
-    url: asyncapi/metaplane-webhooks.yml
-  - type: X-MCPServerCandidate
-    url: mcp/metaplane-mcp.yml
-    note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
 - aid: metaplane:metaplane-connections-api
   name: Metaplane Connections API
   description: >-
-    The Connections API from Metaplane — 4 operations for listing warehouse, BI and dbt connections,
-    reading sync status, triggering a re-sync and rotating a connection private key.
+    The Connections API from Metaplane — 4 operations for listing warehouse, BI and dbt connections, reading
+    sync status, triggering a re-sync and rotating a connection private key.
   humanURL: https://docs.metaplane.dev/reference/getallconnections
   baseURL: https://dev.api.metaplane.dev
   tags:
@@ -107,9 +74,8 @@ apis:
 - aid: metaplane:metaplane-monitors-api
   name: Metaplane Monitors API
   description: >-
-    The Monitors API from Metaplane — 12 operations for creating, updating, running and reading data
-    quality monitors, their evaluation history and their status, plus historic-data import and
-    datapoint ingestion.
+    The Monitors API from Metaplane — 12 operations for creating, updating, running and reading data quality
+    monitors, their evaluation history and their status, plus historic-data import and datapoint ingestion.
   humanURL: https://docs.metaplane.dev/reference/createmonitor
   baseURL: https://dev.api.metaplane.dev
   tags:
@@ -125,8 +91,8 @@ apis:
   name: Metaplane Tags API
   description: >-
     The Tags API from Metaplane — 7 operations for bulk-labelling tables and monitors, removing tags,
-    fetching tag definitions and reading tagged objects and monitors back. Tags are the routing
-    dimension for incident alerts.
+    fetching tag definitions and reading tagged objects and monitors back. Tags are the routing dimension
+    for incident alerts.
   humanURL: https://docs.metaplane.dev/reference/tagtables
   baseURL: https://dev.api.metaplane.dev
   tags:
