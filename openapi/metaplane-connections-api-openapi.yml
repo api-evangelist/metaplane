@@ -1,8 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
   title: Metaplane Connections API
-  description: 'The Connections API from Metaplane — 4 operation(s) for connections. Data observability: automated anomaly
-    detection and data quality monitoring.'
+  description: MetaplanePublicApi API description
   version: '1.0'
   contact:
     name: Metaplane
@@ -61,8 +60,7 @@ paths:
       tags:
       - Connections
       summary: Sync
-      description: Kicks of a task to re-sync the connection. Please note that this method returning 200 does not means the
-        connection has finished syncing. You can poll the connection status api to determine when the sync has finished
+      description: Kicks of a task to re-sync the connection. Please note that this method returning 200 does not means the connection has finished syncing. You can poll the connection status api to determine when the sync has finished
       operationId: syncConnection
       parameters:
       - name: connectionId
@@ -99,6 +97,23 @@ paths:
           description: Success
 components:
   schemas:
+    ConnectionSyncStatusResult:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - STARTED
+          - SUCCEEDED
+          - ERRORED
+        errorMessage:
+          type: string
+        connectionId:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
     Connection:
       type: object
       properties:
@@ -149,31 +164,15 @@ components:
           enum:
           - ACTIVE
           - DELETED
-    ConnectionSyncStatusResult:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - STARTED
-          - SUCCEEDED
-          - ERRORED
-        errorMessage:
-          type: string
-        connectionId:
-          type: string
-          format: uuid
-        timestamp:
-          type: string
-          format: date-time
     UpdatePrivateKeyRequest:
       type: object
       properties:
         privateKey:
           type: string
         privateKeyPassphrase:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
   securitySchemes:
     Authorization:
       type: apiKey
@@ -183,5 +182,6 @@ components:
 x-api-evangelist:
   harvested: '2026-08-29'
   method: searched
-  source: Split by tag from openapi/_original/metaplane-api-openapi.yml, itself the union of the 23 OpenAPI documents Metaplane
-    publishes at https://docs.metaplane.dev/reference/<operation>.md
+  source: https://docs.metaplane.dev/reference/<operation>.md — Metaplane publishes a complete, verbatim OpenAPI document for each of its 23 API reference operations on its own ReadMe docs host; this file is the faithful union of those 23 published documents (paths, components.schemas, servers, security merged; nothing authored).
+  operations: 23
+  note: 'Replaces an earlier scaffolded spec in this repo whose paths (/createmonitor, /getallconnections …) were ReadMe page slugs, not real API paths. The real paths are /v1/* and /v2/*. Verified live: https://dev.api.metaplane.dev/v1/connections returns 401 (auth required); https://api.metaplane.dev/v1/connections returns 404.'

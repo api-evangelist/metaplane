@@ -1,8 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
   title: Metaplane Tags API
-  description: 'The Tags API from Metaplane — 7 operation(s) for tags. Data observability: automated anomaly detection and
-    data quality monitoring.'
+  description: MetaplanePublicApi API description
   version: '1.0'
   contact:
     name: Metaplane
@@ -19,8 +18,7 @@ paths:
       tags:
       - Tags
       summary: Batch fetch tag definitions
-      description: Fetch the Metaplane definition for the given tag name. POST is just for a more expressive request body,
-        no mutation occurs
+      description: Fetch the Metaplane definition for the given tag name. POST is just for a more expressive request body, no mutation occurs
       operationId: fetchTagDefinitions
       requestBody:
         content:
@@ -165,53 +163,38 @@ paths:
                 $ref: '#/components/schemas/TagTablesResult'
 components:
   schemas:
-    LabelNameValue:
+    TagTablesResult:
       type: object
       properties:
-        name:
-          type: string
-        value:
-          type: string
-    MonitorConfig:
-      type: object
-      properties:
-        customSql:
-          type: string
-          nullable: true
-        customMetricUnitType:
-          type: string
-          description: Overrides the display type in the metaplane UI. Default to float if not specified. Only applies to
-            custom sql monitors
-          nullable: true
-          enum:
-          - INT
-          - FLOAT
-          - PERCENT
-          - SECOND
-          - BYTE
-          - MILLISECOND
-        incrementalClause:
-          $ref: '#/components/schemas/PublicIncrementalClause'
-        customWhereClause:
-          type: string
-          nullable: true
-        alertRule:
-          $ref: '#/components/schemas/PublicAlertRule'
-        groupByColumns:
+        successfullyTaggedTablePaths:
+          uniqueItems: true
           type: array
-          description: List of columns to group query by
-          nullable: true
           items:
             type: string
-            description: List of columns to group query by
-            nullable: true
-        timeZone:
-          type: string
-          description: 'Timezone identifier like: America/New_York'
-          nullable: true
-      nullable: true
-    MonitorGrouping:
+        notFoundTablePaths:
+          uniqueItems: true
+          type:
+          - array
+          - 'null'
+          items:
+            type:
+            - string
+            - 'null'
+    RemoveMonitorTagsRequest:
       type: object
+      properties:
+        tagNames:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        monitorId:
+          type: string
+          format: uuid
+    MonitorGrouping:
+      type:
+      - object
+      - 'null'
       properties:
         groupings:
           uniqueItems: true
@@ -219,9 +202,18 @@ components:
           items:
             $ref: '#/components/schemas/LabelNameValue'
       description: List of all groups that have seen at least one datapoint for this monitor
-      nullable: true
-    PublicAlertRule:
+    TagDefinitionRequest:
       type: object
+      properties:
+        names:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+    PublicAlertRule:
+      type:
+      - object
+      - 'null'
       properties:
         type:
           type: string
@@ -229,12 +221,12 @@ components:
           - ANOMALY
           - MANUAL
         numFailuresBeforeAlert:
-          type: integer
+          type:
+          - integer
+          - 'null'
           description: Number of time a monitor can fail before an incident is created
           format: int32
-          nullable: true
       description: Optional alert rule configuration. Defaults to ANOMALY
-      nullable: true
       discriminator:
         propertyName: type
         mapping:
@@ -243,6 +235,62 @@ components:
       oneOf:
       - $ref: '#/components/schemas/PublicAnomalyAlertRule'
       - $ref: '#/components/schemas/PublicManualThresholdRule'
+    PublicIncrementalClause:
+      type:
+      - object
+      - 'null'
+      properties:
+        columnName:
+          type: string
+        duration:
+          $ref: '#/components/schemas/TimeDuration'
+    PublicEntity:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - TABLE
+          - COLUMN
+          - DATABASE
+          - SCHEMA
+        absolutePath:
+          type: string
+          description: Path of entity type delimited by `.`
+    PublicManualThreshold:
+      type: object
+      properties:
+        operatorType:
+          type: string
+          enum:
+          - GREATER_THAN
+          - GREATER_THAN_EQUALS
+          - LESS_THAN
+          - LESS_THAN_EQUALS
+          - EQUAL
+          - NOT_EQUAL
+        value:
+          type: number
+          format: double
+    TagMonitorsResult:
+      type: object
+      properties:
+        successfullyTaggedMonitors:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            format: uuid
+        notFoundMonitors:
+          uniqueItems: true
+          type:
+          - array
+          - 'null'
+          items:
+            type:
+            - string
+            - 'null'
+            format: uuid
     PublicAnomalyAlertRule:
       type: object
       properties:
@@ -283,64 +331,31 @@ components:
           - STATIONARY
           - NONE
         modelBoundsOverride:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Flags to completely override part of the model bounds
-          nullable: true
           enum:
           - UPPER_ONLY
           - LOWER_ONLY
         minLowerBoundSize:
-          type: number
+          type:
+          - number
+          - 'null'
           description: 'Controls the minimum size for the lower bound of the models predictive range
 
             '
           format: double
-          nullable: true
           default: 3
         minUpperBoundSize:
-          type: number
+          type:
+          - number
+          - 'null'
           description: 'Controls the minimum size for the upper bound of the models predictive range
 
             '
           format: double
-          nullable: true
           default: 3
-    PublicEntity:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - TABLE
-          - COLUMN
-          - DATABASE
-          - SCHEMA
-        absolutePath:
-          type: string
-          description: Path of entity type delimited by `.`
-    PublicIncrementalClause:
-      type: object
-      properties:
-        columnName:
-          type: string
-        duration:
-          $ref: '#/components/schemas/TimeDuration'
-      nullable: true
-    PublicManualThreshold:
-      type: object
-      properties:
-        operatorType:
-          type: string
-          enum:
-          - GREATER_THAN
-          - GREATER_THAN_EQUALS
-          - LESS_THAN
-          - LESS_THAN_EQUALS
-          - EQUAL
-          - NOT_EQUAL
-        value:
-          type: number
-          format: double
     PublicManualThresholdRule:
       type: object
       properties:
@@ -349,6 +364,38 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PublicManualThreshold'
+    LabelNameValue:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+    RemoveTableTagsRequest:
+      type: object
+      properties:
+        tagNames:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        connectionId:
+          type: string
+          format: uuid
+        absoluteTablePath:
+          type: string
+          description: The target tables represented as an absolute path like "{database}.{schema}.{table}"
+    PublicTagDefinition:
+      type: object
+      properties:
+        tagId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
     PublicMonitor:
       type: object
       properties:
@@ -385,11 +432,13 @@ components:
         cronTab:
           type: string
         name:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         description:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         isEnabled:
           type: boolean
         config:
@@ -413,55 +462,12 @@ components:
           items:
             type: string
         monitorGroups:
-          type: array
+          type:
+          - array
+          - 'null'
           description: List of all groups that have seen at least one datapoint for this monitor
-          nullable: true
           items:
             $ref: '#/components/schemas/MonitorGrouping'
-    PublicTagDefinition:
-      type: object
-      properties:
-        tagId:
-          type: integer
-          format: int64
-        name:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-    RemoveMonitorTagsRequest:
-      type: object
-      properties:
-        tagNames:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
-        monitorId:
-          type: string
-          format: uuid
-    RemoveTableTagsRequest:
-      type: object
-      properties:
-        tagNames:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
-        connectionId:
-          type: string
-          format: uuid
-        absoluteTablePath:
-          type: string
-          description: The target tables represented as an absolute path like "{database}.{schema}.{table}"
-    TagDefinitionRequest:
-      type: object
-      properties:
-        names:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
     TagMonitorsRequest:
       type: object
       properties:
@@ -473,23 +479,6 @@ components:
           items:
             type: string
             format: uuid
-    TagMonitorsResult:
-      type: object
-      properties:
-        successfullyTaggedMonitors:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
-            format: uuid
-        notFoundMonitors:
-          uniqueItems: true
-          type: array
-          nullable: true
-          items:
-            type: string
-            format: uuid
-            nullable: true
     TagTablesRequest:
       type: object
       properties:
@@ -505,33 +494,6 @@ components:
           items:
             type: string
             description: A collection of tables represented as absolute paths like "{database}.{schema}.{table}"
-    TagTablesResult:
-      type: object
-      properties:
-        successfullyTaggedTablePaths:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
-        notFoundTablePaths:
-          uniqueItems: true
-          type: array
-          nullable: true
-          items:
-            type: string
-            nullable: true
-    TaggedObjectResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicEntity'
-        nextPageToken:
-          type: string
-          nullable: true
-        hasMore:
-          type: boolean
     TimeDuration:
       type: object
       properties:
@@ -544,6 +506,63 @@ components:
         minutes:
           type: integer
           format: int64
+    MonitorConfig:
+      type:
+      - object
+      - 'null'
+      properties:
+        customSql:
+          type:
+          - string
+          - 'null'
+        customMetricUnitType:
+          type:
+          - string
+          - 'null'
+          description: Overrides the display type in the metaplane UI. Default to float if not specified. Only applies to custom sql monitors
+          enum:
+          - INT
+          - FLOAT
+          - PERCENT
+          - SECOND
+          - BYTE
+          - MILLISECOND
+        incrementalClause:
+          $ref: '#/components/schemas/PublicIncrementalClause'
+        customWhereClause:
+          type:
+          - string
+          - 'null'
+        alertRule:
+          $ref: '#/components/schemas/PublicAlertRule'
+        groupByColumns:
+          type:
+          - array
+          - 'null'
+          description: List of columns to group query by
+          items:
+            type:
+            - string
+            - 'null'
+            description: List of columns to group query by
+        timeZone:
+          type:
+          - string
+          - 'null'
+          description: 'Timezone identifier like: America/New_York'
+    TaggedObjectResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicEntity'
+        nextPageToken:
+          type:
+          - string
+          - 'null'
+        hasMore:
+          type: boolean
   securitySchemes:
     Authorization:
       type: apiKey
@@ -553,5 +572,6 @@ components:
 x-api-evangelist:
   harvested: '2026-08-29'
   method: searched
-  source: Split by tag from openapi/_original/metaplane-api-openapi.yml, itself the union of the 23 OpenAPI documents Metaplane
-    publishes at https://docs.metaplane.dev/reference/<operation>.md
+  source: https://docs.metaplane.dev/reference/<operation>.md — Metaplane publishes a complete, verbatim OpenAPI document for each of its 23 API reference operations on its own ReadMe docs host; this file is the faithful union of those 23 published documents (paths, components.schemas, servers, security merged; nothing authored).
+  operations: 23
+  note: 'Replaces an earlier scaffolded spec in this repo whose paths (/createmonitor, /getallconnections …) were ReadMe page slugs, not real API paths. The real paths are /v1/* and /v2/*. Verified live: https://dev.api.metaplane.dev/v1/connections returns 401 (auth required); https://api.metaplane.dev/v1/connections returns 404.'

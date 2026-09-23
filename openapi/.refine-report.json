@@ -1,14 +1,10 @@
 {
   "provider": "metaplane",
   "sources": [
-    "metaplane-connections-api-openapi.yml",
-    "metaplane-datapoints-api-openapi.yml",
-    "metaplane-monitors-api-openapi.yml",
-    "metaplane-tags-api-openapi.yml"
+    "_original/metaplane-api-openapi.yml"
   ],
   "outputs": [
     "metaplane-connections-api-openapi.yml",
-    "metaplane-datapoints-api-openapi.yml",
     "metaplane-monitors-api-openapi.yml",
     "metaplane-tags-api-openapi.yml"
   ],
@@ -16,11 +12,13 @@
   "errors": [],
   "warnings": [],
   "notes": [
-    "metaplane-connections-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "metaplane-datapoints-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "metaplane-monitors-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "metaplane-tags-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "metaplane-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
     "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "metaplane-connections-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "metaplane-monitors-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "metaplane-tags-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
