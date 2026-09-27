@@ -163,15 +163,42 @@ paths:
                 $ref: '#/components/schemas/TagTablesResult'
 components:
   schemas:
-    TagTablesResult:
+    PublicTagDefinition:
       type: object
       properties:
-        successfullyTaggedTablePaths:
+        tagId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    TagTablesRequest:
+      type: object
+      properties:
+        tagName:
+          type: string
+        connectionId:
+          type: string
+          format: uuid
+        absoluteTablePaths:
+          uniqueItems: true
+          type: array
+          description: A collection of tables represented as absolute paths like "{database}.{schema}.{table}"
+          items:
+            type: string
+            description: A collection of tables represented as absolute paths like "{database}.{schema}.{table}"
+    TagMonitorsResult:
+      type: object
+      properties:
+        successfullyTaggedMonitors:
           uniqueItems: true
           type: array
           items:
             type: string
-        notFoundTablePaths:
+            format: uuid
+        notFoundMonitors:
           uniqueItems: true
           type:
           - array
@@ -180,36 +207,7 @@ components:
             type:
             - string
             - 'null'
-    RemoveMonitorTagsRequest:
-      type: object
-      properties:
-        tagNames:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
-        monitorId:
-          type: string
-          format: uuid
-    MonitorGrouping:
-      type:
-      - object
-      - 'null'
-      properties:
-        groupings:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/LabelNameValue'
-      description: List of all groups that have seen at least one datapoint for this monitor
-    TagDefinitionRequest:
-      type: object
-      properties:
-        names:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
+            format: uuid
     PublicAlertRule:
       type:
       - object
@@ -235,62 +233,6 @@ components:
       oneOf:
       - $ref: '#/components/schemas/PublicAnomalyAlertRule'
       - $ref: '#/components/schemas/PublicManualThresholdRule'
-    PublicIncrementalClause:
-      type:
-      - object
-      - 'null'
-      properties:
-        columnName:
-          type: string
-        duration:
-          $ref: '#/components/schemas/TimeDuration'
-    PublicEntity:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - TABLE
-          - COLUMN
-          - DATABASE
-          - SCHEMA
-        absolutePath:
-          type: string
-          description: Path of entity type delimited by `.`
-    PublicManualThreshold:
-      type: object
-      properties:
-        operatorType:
-          type: string
-          enum:
-          - GREATER_THAN
-          - GREATER_THAN_EQUALS
-          - LESS_THAN
-          - LESS_THAN_EQUALS
-          - EQUAL
-          - NOT_EQUAL
-        value:
-          type: number
-          format: double
-    TagMonitorsResult:
-      type: object
-      properties:
-        successfullyTaggedMonitors:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
-            format: uuid
-        notFoundMonitors:
-          uniqueItems: true
-          type:
-          - array
-          - 'null'
-          items:
-            type:
-            - string
-            - 'null'
-            format: uuid
     PublicAnomalyAlertRule:
       type: object
       properties:
@@ -356,46 +298,19 @@ components:
             '
           format: double
           default: 3
-    PublicManualThresholdRule:
+    PublicEntity:
       type: object
       properties:
-        thresholds:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicManualThreshold'
-    LabelNameValue:
-      type: object
-      properties:
-        name:
+        type:
           type: string
-        value:
+          enum:
+          - TABLE
+          - COLUMN
+          - DATABASE
+          - SCHEMA
+        absolutePath:
           type: string
-    RemoveTableTagsRequest:
-      type: object
-      properties:
-        tagNames:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
-        connectionId:
-          type: string
-          format: uuid
-        absoluteTablePath:
-          type: string
-          description: The target tables represented as an absolute path like "{database}.{schema}.{table}"
-    PublicTagDefinition:
-      type: object
-      properties:
-        tagId:
-          type: integer
-          format: int64
-        name:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
+          description: Path of entity type delimited by `.`
     PublicMonitor:
       type: object
       properties:
@@ -468,6 +383,38 @@ components:
           description: List of all groups that have seen at least one datapoint for this monitor
           items:
             $ref: '#/components/schemas/MonitorGrouping'
+    TaggedObjectResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicEntity'
+        nextPageToken:
+          type:
+          - string
+          - 'null'
+        hasMore:
+          type: boolean
+    RemoveMonitorTagsRequest:
+      type: object
+      properties:
+        tagNames:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        monitorId:
+          type: string
+          format: uuid
+    PublicManualThresholdRule:
+      type: object
+      properties:
+        thresholds:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicManualThreshold'
     TagMonitorsRequest:
       type: object
       properties:
@@ -479,21 +426,23 @@ components:
           items:
             type: string
             format: uuid
-    TagTablesRequest:
+    TagTablesResult:
       type: object
       properties:
-        tagName:
-          type: string
-        connectionId:
-          type: string
-          format: uuid
-        absoluteTablePaths:
+        successfullyTaggedTablePaths:
           uniqueItems: true
           type: array
-          description: A collection of tables represented as absolute paths like "{database}.{schema}.{table}"
           items:
             type: string
-            description: A collection of tables represented as absolute paths like "{database}.{schema}.{table}"
+        notFoundTablePaths:
+          uniqueItems: true
+          type:
+          - array
+          - 'null'
+          items:
+            type:
+            - string
+            - 'null'
     TimeDuration:
       type: object
       properties:
@@ -550,19 +499,70 @@ components:
           - string
           - 'null'
           description: 'Timezone identifier like: America/New_York'
-    TaggedObjectResponse:
+    RemoveTableTagsRequest:
       type: object
       properties:
-        data:
+        tagNames:
+          uniqueItems: true
           type: array
           items:
-            $ref: '#/components/schemas/PublicEntity'
-        nextPageToken:
-          type:
-          - string
-          - 'null'
-        hasMore:
-          type: boolean
+            type: string
+        connectionId:
+          type: string
+          format: uuid
+        absoluteTablePath:
+          type: string
+          description: The target tables represented as an absolute path like "{database}.{schema}.{table}"
+    PublicIncrementalClause:
+      type:
+      - object
+      - 'null'
+      properties:
+        columnName:
+          type: string
+        duration:
+          $ref: '#/components/schemas/TimeDuration'
+    PublicManualThreshold:
+      type: object
+      properties:
+        operatorType:
+          type: string
+          enum:
+          - GREATER_THAN
+          - GREATER_THAN_EQUALS
+          - LESS_THAN
+          - LESS_THAN_EQUALS
+          - EQUAL
+          - NOT_EQUAL
+        value:
+          type: number
+          format: double
+    TagDefinitionRequest:
+      type: object
+      properties:
+        names:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+    LabelNameValue:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+    MonitorGrouping:
+      type:
+      - object
+      - 'null'
+      properties:
+        groupings:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelNameValue'
+      description: List of all groups that have seen at least one datapoint for this monitor
   securitySchemes:
     Authorization:
       type: apiKey

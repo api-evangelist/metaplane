@@ -330,101 +330,15 @@ paths:
           description: Success
 components:
   schemas:
-    BulkFetchMonitorTablesRequest:
+    RunMonitorsRequest:
       type: object
       properties:
-        tablePaths:
-          uniqueItems: true
-          type: array
-          description: 'Set of table path string in format of: {database}.{schema}.{table}'
-          items:
-            type: string
-            description: 'Set of table path string in format of: {database}.{schema}.{table}'
-    PublicImportResult:
-      type: object
-      properties:
-        totalDataPoints:
-          type: integer
-          format: int32
-        totalValidDataPoints:
-          type: integer
-          format: int32
-        groupByValues:
+        testIds:
           uniqueItems: true
           type: array
           items:
             type: string
-        filterReasonCounts:
-          type: object
-          additionalProperties:
-            type: integer
-            format: int64
-    MonitorGrouping:
-      type:
-      - object
-      - 'null'
-      properties:
-        groupings:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/LabelNameValue'
-      description: List of all groups that have seen at least one datapoint for this monitor
-    MonitorUpdate:
-      type: object
-      properties:
-        isEnabled:
-          type: boolean
-        cronTab:
-          type: string
-        config:
-          $ref: '#/components/schemas/MonitorConfig'
-        name:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-    ImportHistoricDataRequest:
-      type: object
-      properties:
-        dataPoints:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicSeriesPointWithTimestamp'
-        isPreview:
-          type:
-          - boolean
-          - 'null'
-          description: Optional flag to allow previewing what the result of the import would be. Setting to true will validate the import without actually inserting data
-          default: false
-    PublicAlertRule:
-      type:
-      - object
-      - 'null'
-      properties:
-        type:
-          type: string
-          enum:
-          - ANOMALY
-          - MANUAL
-        numFailuresBeforeAlert:
-          type:
-          - integer
-          - 'null'
-          description: Number of time a monitor can fail before an incident is created
-          format: int32
-      description: Optional alert rule configuration. Defaults to ANOMALY
-      discriminator:
-        propertyName: type
-        mapping:
-          MANUAL: '#/components/schemas/PublicManualThresholdRule'
-          ANOMALY: '#/components/schemas/PublicAnomalyAlertRule'
-      oneOf:
-      - $ref: '#/components/schemas/PublicAnomalyAlertRule'
-      - $ref: '#/components/schemas/PublicManualThresholdRule'
+            format: uuid
     EvaluationHistoryRequest:
       type: object
       properties:
@@ -512,68 +426,51 @@ components:
           description: Error message if the latest evaluation is failed
         annotation:
           $ref: '#/components/schemas/AnnotatedPoint'
-    PublicIncrementalClause:
+    PublicAlertRule:
       type:
       - object
       - 'null'
       properties:
-        columnName:
-          type: string
-        duration:
-          $ref: '#/components/schemas/TimeDuration'
-    PublicManualThreshold:
-      type: object
-      properties:
-        operatorType:
+        type:
           type: string
           enum:
-          - GREATER_THAN
-          - GREATER_THAN_EQUALS
-          - LESS_THAN
-          - LESS_THAN_EQUALS
-          - EQUAL
-          - NOT_EQUAL
-        value:
-          type: number
-          format: double
-    MonitorStatusResultV2:
+          - ANOMALY
+          - MANUAL
+        numFailuresBeforeAlert:
+          type:
+          - integer
+          - 'null'
+          description: Number of time a monitor can fail before an incident is created
+          format: int32
+      description: Optional alert rule configuration. Defaults to ANOMALY
+      discriminator:
+        propertyName: type
+        mapping:
+          MANUAL: '#/components/schemas/PublicManualThresholdRule'
+          ANOMALY: '#/components/schemas/PublicAnomalyAlertRule'
+      oneOf:
+      - $ref: '#/components/schemas/PublicAnomalyAlertRule'
+      - $ref: '#/components/schemas/PublicManualThresholdRule'
+    MonitorListResult:
       type: object
       properties:
-        statuses:
+        data:
           type: array
           items:
-            $ref: '#/components/schemas/SeriesStatus'
-        isErrored:
-          type: boolean
-          description: Flag set to true if the group by query itself failed to run
-        timestamp:
-          type: string
-          format: date-time
-        errorMessage:
-          type:
-          - string
-          - 'null'
-          description: Error message if the latest evaluation is failed
-    PublicSeriesPointWithTimestamp:
+            $ref: '#/components/schemas/PublicMonitor'
+    ImportHistoricDataRequest:
       type: object
       properties:
-        value:
-          type: number
-          format: double
-        groups:
+        dataPoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicSeriesPointWithTimestamp'
+        isPreview:
           type:
-          - object
+          - boolean
           - 'null'
-          additionalProperties:
-            type:
-            - string
-            - 'null'
-            description: Each key is a group name and each value should be the group by value. Omit the monitor has no groups
-          description: Each key is a group name and each value should be the group by value. Omit the monitor has no groups
-        timestamp:
-          type: string
-          description: ISO 8601 date time offset e.g. 2023‐09‐07T06:18:56−07:00 or 2023‐09‐07T13:18:56Z
-          format: date-time
+          description: Optional flag to allow previewing what the result of the import would be. Setting to true will validate the import without actually inserting data
+          default: false
     PublicAnomalyAlertRule:
       type: object
       properties:
@@ -639,69 +536,34 @@ components:
             '
           format: double
           default: 3
-    PublicManualThresholdRule:
+    PublicImportResult:
       type: object
       properties:
-        thresholds:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicManualThreshold'
-    LabelNameValue:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type: string
-    RunMonitorsRequest:
-      type: object
-      properties:
-        testIds:
+        totalDataPoints:
+          type: integer
+          format: int32
+        totalValidDataPoints:
+          type: integer
+          format: int32
+        groupByValues:
           uniqueItems: true
           type: array
           items:
             type: string
-            format: uuid
-    MonitorEgg:
+        filterReasonCounts:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int64
+    MonitorUpdate:
       type: object
       properties:
-        type:
-          type: string
-          enum:
-          - ROW_COUNT
-          - COLUMN_COUNT
-          - CARDINALITY
-          - UNIQUENESS
-          - NULLNESS
-          - PERCENT_ZERO
-          - PERCENT_NEGATIVE
-          - MIN
-          - MAX
-          - MEAN
-          - STDDEV
-          - FRESHNESS
-          - CUSTOM
-          - PUSH
-          - SUM
-          - DURATION
-          - GENERIC_OBJECT
+        isEnabled:
+          type: boolean
         cronTab:
           type: string
         config:
           $ref: '#/components/schemas/MonitorConfig'
-        connectionId:
-          type: string
-          format: uuid
-        entityType:
-          type: string
-          enum:
-          - TABLE
-          - COLUMN
-          - DATABASE
-          - SCHEMA
-        absolutePathString:
-          type: string
         name:
           type:
           - string
@@ -782,13 +644,6 @@ components:
           description: List of all groups that have seen at least one datapoint for this monitor
           items:
             $ref: '#/components/schemas/MonitorGrouping'
-    MonitorListResult:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicMonitor'
     PublicSeriesPoint:
       type: object
       properties:
@@ -805,18 +660,14 @@ components:
             - 'null'
             description: Each key is a group name and each value should be the group by value. Omit the monitor has no groups
           description: Each key is a group name and each value should be the group by value. Omit the monitor has no groups
-    TimeDuration:
+    PublicManualThresholdRule:
       type: object
       properties:
-        days:
-          type: integer
-          format: int64
-        hours:
-          type: integer
-          format: int64
-        minutes:
-          type: integer
-          format: int64
+        thresholds:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicManualThreshold'
     AnnotatedPoint:
       type:
       - object
@@ -836,6 +687,28 @@ components:
         annotatingUserEmail:
           type: string
       description: Optional annotation that was applied to this specific datapoint
+    TimeDuration:
+      type: object
+      properties:
+        days:
+          type: integer
+          format: int64
+        hours:
+          type: integer
+          format: int64
+        minutes:
+          type: integer
+          format: int64
+    BulkFetchMonitorTablesRequest:
+      type: object
+      properties:
+        tablePaths:
+          uniqueItems: true
+          type: array
+          description: 'Set of table path string in format of: {database}.{schema}.{table}'
+          items:
+            type: string
+            description: 'Set of table path string in format of: {database}.{schema}.{table}'
     SeriesStatus:
       type: object
       properties:
@@ -878,6 +751,71 @@ components:
             type: integer
             description: A list of currently active incidents
             format: int64
+    MonitorStatusResultV2:
+      type: object
+      properties:
+        statuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/SeriesStatus'
+        isErrored:
+          type: boolean
+          description: Flag set to true if the group by query itself failed to run
+        timestamp:
+          type: string
+          format: date-time
+        errorMessage:
+          type:
+          - string
+          - 'null'
+          description: Error message if the latest evaluation is failed
+    MonitorEgg:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - ROW_COUNT
+          - COLUMN_COUNT
+          - CARDINALITY
+          - UNIQUENESS
+          - NULLNESS
+          - PERCENT_ZERO
+          - PERCENT_NEGATIVE
+          - MIN
+          - MAX
+          - MEAN
+          - STDDEV
+          - FRESHNESS
+          - CUSTOM
+          - PUSH
+          - SUM
+          - DURATION
+          - GENERIC_OBJECT
+        cronTab:
+          type: string
+        config:
+          $ref: '#/components/schemas/MonitorConfig'
+        connectionId:
+          type: string
+          format: uuid
+        entityType:
+          type: string
+          enum:
+          - TABLE
+          - COLUMN
+          - DATABASE
+          - SCHEMA
+        absolutePathString:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
     MonitorConfig:
       type:
       - object
@@ -922,6 +860,68 @@ components:
           - string
           - 'null'
           description: 'Timezone identifier like: America/New_York'
+    PublicIncrementalClause:
+      type:
+      - object
+      - 'null'
+      properties:
+        columnName:
+          type: string
+        duration:
+          $ref: '#/components/schemas/TimeDuration'
+    PublicManualThreshold:
+      type: object
+      properties:
+        operatorType:
+          type: string
+          enum:
+          - GREATER_THAN
+          - GREATER_THAN_EQUALS
+          - LESS_THAN
+          - LESS_THAN_EQUALS
+          - EQUAL
+          - NOT_EQUAL
+        value:
+          type: number
+          format: double
+    LabelNameValue:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+    PublicSeriesPointWithTimestamp:
+      type: object
+      properties:
+        value:
+          type: number
+          format: double
+        groups:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type:
+            - string
+            - 'null'
+            description: Each key is a group name and each value should be the group by value. Omit the monitor has no groups
+          description: Each key is a group name and each value should be the group by value. Omit the monitor has no groups
+        timestamp:
+          type: string
+          description: ISO 8601 date time offset e.g. 2023‐09‐07T06:18:56−07:00 or 2023‐09‐07T13:18:56Z
+          format: date-time
+    MonitorGrouping:
+      type:
+      - object
+      - 'null'
+      properties:
+        groupings:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelNameValue'
+      description: List of all groups that have seen at least one datapoint for this monitor
   securitySchemes:
     Authorization:
       type: apiKey
