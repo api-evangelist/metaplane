@@ -97,15 +97,23 @@ paths:
           description: Success
 components:
   schemas:
-    UpdatePrivateKeyRequest:
+    ConnectionSyncStatusResult:
       type: object
       properties:
-        privateKey:
+        status:
           type: string
-        privateKeyPassphrase:
-          type:
-          - string
-          - 'null'
+          enum:
+          - STARTED
+          - SUCCEEDED
+          - ERRORED
+        errorMessage:
+          type: string
+        connectionId:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
     Connection:
       type: object
       properties:
@@ -156,23 +164,15 @@ components:
           enum:
           - ACTIVE
           - DELETED
-    ConnectionSyncStatusResult:
+    UpdatePrivateKeyRequest:
       type: object
       properties:
-        status:
+        privateKey:
           type: string
-          enum:
-          - STARTED
-          - SUCCEEDED
-          - ERRORED
-        errorMessage:
-          type: string
-        connectionId:
-          type: string
-          format: uuid
-        timestamp:
-          type: string
-          format: date-time
+        privateKeyPassphrase:
+          type:
+          - string
+          - 'null'
   securitySchemes:
     Authorization:
       type: apiKey
