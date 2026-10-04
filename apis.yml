@@ -105,6 +105,9 @@ apis:
   - type: AgentSkill
     url: skills/metaplane-tag-and-triage-data-assets.md
 common:
+- type: CapabilityMap
+  url: capabilities/metaplane-capability-edges.yml
+  name: Metaplane Business Capability Map
 - type: Website
   url: https://www.metaplane.dev
 - type: Documentation
