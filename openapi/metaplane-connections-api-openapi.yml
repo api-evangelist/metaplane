@@ -97,6 +97,15 @@ paths:
           description: Success
 components:
   schemas:
+    UpdatePrivateKeyRequest:
+      type: object
+      properties:
+        privateKey:
+          type: string
+        privateKeyPassphrase:
+          type:
+          - string
+          - 'null'
     ConnectionSyncStatusResult:
       type: object
       properties:
@@ -164,15 +173,6 @@ components:
           enum:
           - ACTIVE
           - DELETED
-    UpdatePrivateKeyRequest:
-      type: object
-      properties:
-        privateKey:
-          type: string
-        privateKeyPassphrase:
-          type:
-          - string
-          - 'null'
   securitySchemes:
     Authorization:
       type: apiKey

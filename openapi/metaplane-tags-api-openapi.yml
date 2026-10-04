@@ -163,6 +163,284 @@ paths:
                 $ref: '#/components/schemas/TagTablesResult'
 components:
   schemas:
+    TagMonitorsResult:
+      type: object
+      properties:
+        successfullyTaggedMonitors:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            format: uuid
+        notFoundMonitors:
+          uniqueItems: true
+          type:
+          - array
+          - 'null'
+          items:
+            type:
+            - string
+            - 'null'
+            format: uuid
+    PublicManualThresholdRule:
+      type: object
+      properties:
+        thresholds:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicManualThreshold'
+    LabelNameValue:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+    TagMonitorsRequest:
+      type: object
+      properties:
+        tagName:
+          type: string
+        monitorIds:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            format: uuid
+    TagTablesResult:
+      type: object
+      properties:
+        successfullyTaggedTablePaths:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        notFoundTablePaths:
+          uniqueItems: true
+          type:
+          - array
+          - 'null'
+          items:
+            type:
+            - string
+            - 'null'
+    PublicAnomalyAlertRule:
+      type: object
+      properties:
+        sensitivity:
+          type: number
+          description: 'Control the bounds of the model. The default value is 3.0.
+
+            0.3 high is the highest sensitivity correlating with smallest bounds.
+
+            6.0 Is lowest sensitivity corresponding with the largest bounds.
+
+            '
+          format: double
+          default: 3
+        monitorTypeOverride:
+          type: string
+          enum:
+          - ROW_COUNT
+          - COLUMN_COUNT
+          - CARDINALITY
+          - UNIQUENESS
+          - NULLNESS
+          - PERCENT_ZERO
+          - PERCENT_NEGATIVE
+          - MIN
+          - MAX
+          - MEAN
+          - STDDEV
+          - FRESHNESS
+          - CUSTOM
+          - PUSH
+          - SUM
+          - DURATION
+          - GENERIC_OBJECT
+        modelClassType:
+          type: string
+          enum:
+          - STATIONARY
+          - NONE
+        modelBoundsOverride:
+          type:
+          - string
+          - 'null'
+          description: Flags to completely override part of the model bounds
+          enum:
+          - UPPER_ONLY
+          - LOWER_ONLY
+        minLowerBoundSize:
+          type:
+          - number
+          - 'null'
+          description: 'Controls the minimum size for the lower bound of the models predictive range
+
+            '
+          format: double
+          default: 3
+        minUpperBoundSize:
+          type:
+          - number
+          - 'null'
+          description: 'Controls the minimum size for the upper bound of the models predictive range
+
+            '
+          format: double
+          default: 3
+    TimeDuration:
+      type: object
+      properties:
+        days:
+          type: integer
+          format: int64
+        hours:
+          type: integer
+          format: int64
+        minutes:
+          type: integer
+          format: int64
+    RemoveTableTagsRequest:
+      type: object
+      properties:
+        tagNames:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+        connectionId:
+          type: string
+          format: uuid
+        absoluteTablePath:
+          type: string
+          description: The target tables represented as an absolute path like "{database}.{schema}.{table}"
+    PublicTagDefinition:
+      type: object
+      properties:
+        tagId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+    PublicAlertRule:
+      type:
+      - object
+      - 'null'
+      properties:
+        type:
+          type: string
+          enum:
+          - ANOMALY
+          - MANUAL
+        numFailuresBeforeAlert:
+          type:
+          - integer
+          - 'null'
+          description: Number of time a monitor can fail before an incident is created
+          format: int32
+      description: Optional alert rule configuration. Defaults to ANOMALY
+      discriminator:
+        propertyName: type
+        mapping:
+          MANUAL: '#/components/schemas/PublicManualThresholdRule'
+          ANOMALY: '#/components/schemas/PublicAnomalyAlertRule'
+      oneOf:
+      - $ref: '#/components/schemas/PublicAnomalyAlertRule'
+      - $ref: '#/components/schemas/PublicManualThresholdRule'
+    PublicEntity:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - TABLE
+          - COLUMN
+          - DATABASE
+          - SCHEMA
+        absolutePath:
+          type: string
+          description: Path of entity type delimited by `.`
+    TagDefinitionRequest:
+      type: object
+      properties:
+        names:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+    TaggedObjectResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicEntity'
+        nextPageToken:
+          type:
+          - string
+          - 'null'
+        hasMore:
+          type: boolean
+    MonitorConfig:
+      type:
+      - object
+      - 'null'
+      properties:
+        customSql:
+          type:
+          - string
+          - 'null'
+        customMetricUnitType:
+          type:
+          - string
+          - 'null'
+          description: Overrides the display type in the metaplane UI. Default to float if not specified. Only applies to custom sql monitors
+          enum:
+          - INT
+          - FLOAT
+          - PERCENT
+          - SECOND
+          - BYTE
+          - MILLISECOND
+        incrementalClause:
+          $ref: '#/components/schemas/PublicIncrementalClause'
+        customWhereClause:
+          type:
+          - string
+          - 'null'
+        alertRule:
+          $ref: '#/components/schemas/PublicAlertRule'
+        groupByColumns:
+          type:
+          - array
+          - 'null'
+          description: List of columns to group query by
+          items:
+            type:
+            - string
+            - 'null'
+            description: List of columns to group query by
+        timeZone:
+          type:
+          - string
+          - 'null'
+          description: 'Timezone identifier like: America/New_York'
+    MonitorGrouping:
+      type:
+      - object
+      - 'null'
+      properties:
+        groupings:
+          uniqueItems: true
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelNameValue'
+      description: List of all groups that have seen at least one datapoint for this monitor
     PublicMonitor:
       type: object
       properties:
@@ -235,31 +513,26 @@ components:
           description: List of all groups that have seen at least one datapoint for this monitor
           items:
             $ref: '#/components/schemas/MonitorGrouping'
-    TagTablesResult:
+    PublicIncrementalClause:
+      type:
+      - object
+      - 'null'
+      properties:
+        columnName:
+          type: string
+        duration:
+          $ref: '#/components/schemas/TimeDuration'
+    RemoveMonitorTagsRequest:
       type: object
       properties:
-        successfullyTaggedTablePaths:
+        tagNames:
           uniqueItems: true
           type: array
           items:
             type: string
-        notFoundTablePaths:
-          uniqueItems: true
-          type:
-          - array
-          - 'null'
-          items:
-            type:
-            - string
-            - 'null'
-    TagDefinitionRequest:
-      type: object
-      properties:
-        names:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
+        monitorId:
+          type: string
+          format: uuid
     PublicManualThreshold:
       type: object
       properties:
@@ -275,243 +548,6 @@ components:
         value:
           type: number
           format: double
-    TimeDuration:
-      type: object
-      properties:
-        days:
-          type: integer
-          format: int64
-        hours:
-          type: integer
-          format: int64
-        minutes:
-          type: integer
-          format: int64
-    PublicManualThresholdRule:
-      type: object
-      properties:
-        thresholds:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicManualThreshold'
-    TagMonitorsResult:
-      type: object
-      properties:
-        successfullyTaggedMonitors:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
-            format: uuid
-        notFoundMonitors:
-          uniqueItems: true
-          type:
-          - array
-          - 'null'
-          items:
-            type:
-            - string
-            - 'null'
-            format: uuid
-    TagMonitorsRequest:
-      type: object
-      properties:
-        tagName:
-          type: string
-        monitorIds:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
-            format: uuid
-    RemoveMonitorTagsRequest:
-      type: object
-      properties:
-        tagNames:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
-        monitorId:
-          type: string
-          format: uuid
-    MonitorConfig:
-      type:
-      - object
-      - 'null'
-      properties:
-        customSql:
-          type:
-          - string
-          - 'null'
-        customMetricUnitType:
-          type:
-          - string
-          - 'null'
-          description: Overrides the display type in the metaplane UI. Default to float if not specified. Only applies to custom sql monitors
-          enum:
-          - INT
-          - FLOAT
-          - PERCENT
-          - SECOND
-          - BYTE
-          - MILLISECOND
-        incrementalClause:
-          $ref: '#/components/schemas/PublicIncrementalClause'
-        customWhereClause:
-          type:
-          - string
-          - 'null'
-        alertRule:
-          $ref: '#/components/schemas/PublicAlertRule'
-        groupByColumns:
-          type:
-          - array
-          - 'null'
-          description: List of columns to group query by
-          items:
-            type:
-            - string
-            - 'null'
-            description: List of columns to group query by
-        timeZone:
-          type:
-          - string
-          - 'null'
-          description: 'Timezone identifier like: America/New_York'
-    LabelNameValue:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type: string
-    RemoveTableTagsRequest:
-      type: object
-      properties:
-        tagNames:
-          uniqueItems: true
-          type: array
-          items:
-            type: string
-        connectionId:
-          type: string
-          format: uuid
-        absoluteTablePath:
-          type: string
-          description: The target tables represented as an absolute path like "{database}.{schema}.{table}"
-    PublicAnomalyAlertRule:
-      type: object
-      properties:
-        sensitivity:
-          type: number
-          description: 'Control the bounds of the model. The default value is 3.0.
-
-            0.3 high is the highest sensitivity correlating with smallest bounds.
-
-            6.0 Is lowest sensitivity corresponding with the largest bounds.
-
-            '
-          format: double
-          default: 3
-        monitorTypeOverride:
-          type: string
-          enum:
-          - ROW_COUNT
-          - COLUMN_COUNT
-          - CARDINALITY
-          - UNIQUENESS
-          - NULLNESS
-          - PERCENT_ZERO
-          - PERCENT_NEGATIVE
-          - MIN
-          - MAX
-          - MEAN
-          - STDDEV
-          - FRESHNESS
-          - CUSTOM
-          - PUSH
-          - SUM
-          - DURATION
-          - GENERIC_OBJECT
-        modelClassType:
-          type: string
-          enum:
-          - STATIONARY
-          - NONE
-        modelBoundsOverride:
-          type:
-          - string
-          - 'null'
-          description: Flags to completely override part of the model bounds
-          enum:
-          - UPPER_ONLY
-          - LOWER_ONLY
-        minLowerBoundSize:
-          type:
-          - number
-          - 'null'
-          description: 'Controls the minimum size for the lower bound of the models predictive range
-
-            '
-          format: double
-          default: 3
-        minUpperBoundSize:
-          type:
-          - number
-          - 'null'
-          description: 'Controls the minimum size for the upper bound of the models predictive range
-
-            '
-          format: double
-          default: 3
-    TaggedObjectResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicEntity'
-        nextPageToken:
-          type:
-          - string
-          - 'null'
-        hasMore:
-          type: boolean
-    PublicTagDefinition:
-      type: object
-      properties:
-        tagId:
-          type: integer
-          format: int64
-        name:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-    PublicIncrementalClause:
-      type:
-      - object
-      - 'null'
-      properties:
-        columnName:
-          type: string
-        duration:
-          $ref: '#/components/schemas/TimeDuration'
-    PublicEntity:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - TABLE
-          - COLUMN
-          - DATABASE
-          - SCHEMA
-        absolutePath:
-          type: string
-          description: Path of entity type delimited by `.`
     TagTablesRequest:
       type: object
       properties:
@@ -527,42 +563,6 @@ components:
           items:
             type: string
             description: A collection of tables represented as absolute paths like "{database}.{schema}.{table}"
-    MonitorGrouping:
-      type:
-      - object
-      - 'null'
-      properties:
-        groupings:
-          uniqueItems: true
-          type: array
-          items:
-            $ref: '#/components/schemas/LabelNameValue'
-      description: List of all groups that have seen at least one datapoint for this monitor
-    PublicAlertRule:
-      type:
-      - object
-      - 'null'
-      properties:
-        type:
-          type: string
-          enum:
-          - ANOMALY
-          - MANUAL
-        numFailuresBeforeAlert:
-          type:
-          - integer
-          - 'null'
-          description: Number of time a monitor can fail before an incident is created
-          format: int32
-      description: Optional alert rule configuration. Defaults to ANOMALY
-      discriminator:
-        propertyName: type
-        mapping:
-          MANUAL: '#/components/schemas/PublicManualThresholdRule'
-          ANOMALY: '#/components/schemas/PublicAnomalyAlertRule'
-      oneOf:
-      - $ref: '#/components/schemas/PublicAnomalyAlertRule'
-      - $ref: '#/components/schemas/PublicManualThresholdRule'
   securitySchemes:
     Authorization:
       type: apiKey
