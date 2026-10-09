@@ -1,21 +1,23 @@
-generated: '2026-07-15'
+generated: '2026-09-23'
 method: generated
-source: openapi/metaplane-openapi.yml
+source: openapi/metaplane-connections-api-openapi.yml, openapi/metaplane-monitors-api-openapi.yml,
+  openapi/metaplane-tags-api-openapi.yml
 description: Recommended x-agentic-access execution contracts, classified heuristically from
   the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
   audience per deployment. See research/curity/agentic-governance/.
 summary:
-  operations: 22
+  operations: 23
   by_action_class:
-    connected: 6
-    acting: 16
+    connected: 11
+    acting: 12
   by_consequence:
-    read: 6
-    write: 16
+    read: 11
+    write: 12
   human_in_the_loop_required: 0
 operations:
-- path: /getallconnections
+- path: /v1/connections
   method: get
+  operationId: getAllConnections
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -23,8 +25,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /getconnectionstatus
+- path: /v1/connections/{connectionId}/sync/status
   method: get
+  operationId: getConnectionStatus
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -32,8 +35,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /syncconnection
+- path: /v1/connections/{connectionId}/sync
   method: post
+  operationId: syncConnection
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -47,8 +51,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /updateprivatekey
+- path: /v1/connections/{connectionId}/update-private-key
   method: post
+  operationId: updatePrivateKey
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -62,8 +67,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /bulkgettablemonitors
+- path: /v2/monitors/bulk-fetch/tables/{connectionId}
   method: post
+  operationId: bulkGetTableMonitors
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -77,8 +83,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /createmonitor
+- path: /v1/monitors
   method: post
+  operationId: createMonitor
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -92,8 +99,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /getallmonitorsforsource
+- path: /v1/monitors/connection/{connectionId}
   method: get
+  operationId: getAllMonitorsForSource
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -101,23 +109,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /getevaluationhistory
+- path: /v1/monitors/evaluation-history/{monitorId}
   method: post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /getmonitor
-  method: get
+  operationId: getEvaluationHistory
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -125,8 +119,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /getmonitors
+- path: /v1/monitors/{monitorId}
   method: get
+  operationId: getMonitor
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -134,8 +129,25 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /getmonitorstatus2
+- path: /v1/monitors/{monitorId}
+  method: post
+  operationId: updateMonitor
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/monitors/path/{connectionId}/{absolutePath}
   method: get
+  operationId: getMonitors
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -143,8 +155,29 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /importhistoricdataformonitor
+- path: /v1/monitors/status/{monitorId}
+  method: get
+  operationId: getMonitorStatus
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v2/monitors/status/{monitorId}
+  method: get
+  operationId: getMonitorStatus2
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/monitors/import-historic/{monitorId}
   method: post
+  operationId: importHistoricDataForMonitor
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -158,8 +191,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /ingestdatapoint
+- path: /v1/monitors/ingest-datapoint/{monitorId}
   method: post
+  operationId: ingestDataPoint
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -173,8 +207,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /runmonitors
+- path: /v1/monitors/run
   method: post
+  operationId: runMonitors
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -188,8 +223,39 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /updatemonitor
+- path: /v1/tags/batch/fetch-tags
   method: post
+  operationId: fetchTagDefinitions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/tags/tagged-monitors/{tag}
+  method: get
+  operationId: fetchTaggedMonitors
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/tags/tagged-objects/{tag}
+  method: get
+  operationId: fetchTaggedObjects
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/tags/remove-monitor-tags
+  method: post
+  operationId: removeMonitorTags
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -203,8 +269,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /fetchtagdefinitions
+- path: /v1/tags/remove-table-tags
   method: post
+  operationId: removeTableTags
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -218,8 +285,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /fetchtaggedmonitors
+- path: /v1/tags/batch/tag-monitors
   method: post
+  operationId: tagMonitors
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -233,68 +301,9 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /fetchtaggedobjects
+- path: /v1/tags/batch/tag-tables
   method: post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /removemonitortags
-  method: post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /removetabletags
-  method: post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /tagmonitors
-  method: post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /tagtables
-  method: post
+  operationId: tagTables
   x-agentic-access:
     action-class: acting
     consequence: write
