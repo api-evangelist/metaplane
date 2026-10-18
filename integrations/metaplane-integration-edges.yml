@@ -1,0 +1,24 @@
+edges:
+- partner_name: dbt (dbt-package-hub)
+  partner: dbt
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: dbt-package-hub
+  evidence: https://hub.getdbt.com/metaplane/dbt_expectations/latest/
+  mirror_of: dbt/integrations/dbt-integration-edges.yml
+  apps:
+  - Metaplane
+  listing_count: 1
+  detected: '2026-10-18'
+  detected_by: mirror-platform-listings.py
+  category: dbt package
+generated: '2026-10-18'
+method: searched
+checked:
+- dbt/integrations/dbt-integration-edges.yml
+source:
+- dbt/integrations/dbt-integration-edges.yml
