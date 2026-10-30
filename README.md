@@ -1,4 +1,4 @@
-# Metaplane (metaplane)
+# Metaplane
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,52 +64,155 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Metaplane is a data observability platform providing automated anomaly detection and data quality monitoring.
+Metaplane is a data observability platform for data teams — automated anomaly detection, data quality monitoring, column-level lineage, schema-change alerting and data CI/CD across Snowflake, BigQuery, Redshift, Databricks, ClickHouse, Postgres, MySQL, SQL Server, S3, dbt, Airflow and the major BI tools. Metaplane learns the normal behaviour of every monitored table with an ML model and raises grouped incidents when volume, freshness, nullness, uniqueness, cardinality or a custom SQL metric drifts out of bounds. It exposes a REST API of 23 operations over connections, monitors, monitor evaluations, datapoint ingestion and tags, documented on a ReadMe developer portal, plus outbound incident webhooks and a free local CLI for visualising dbt runs. Metaplane was acquired by Datadog in April 2025 and continues to operate as a standalone product surface.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/metaplane/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/metaplane/refs/heads/main/apis.yml)
+**Areas:** AIOps · Data Observability · Data Quality · Anomaly Detection · Data Lineage · Monitoring · Analytics · Data Engineering · dbt · Snowflake
 
-## Scope
+## Metaplane on APIs.io
 
-- **Type:** Index
+Everything profiled for Metaplane is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/metaplane/](https://apis.io/providers/metaplane/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (3)
 
-- AIOps
-- Data Observability
+- [Metaplane Connections API](https://apis.io/apis/metaplane/metaplane-connections-api/) — The Connections API from Metaplane — 4 operations for listing warehouse, BI and dbt connections, reading sync status, triggering a re-sync and rotating a…
+- [Metaplane Monitors API](https://apis.io/apis/metaplane/metaplane-monitors-api/) — The Monitors API from Metaplane — 12 operations for creating, updating, running and reading data quality monitors, their evaluation history and their…
+- [Metaplane Tags API](https://apis.io/apis/metaplane/metaplane-tags-api/) — The Tags API from Metaplane — 7 operations for bulk-labelling tables and monitors, removing tags, fetching tag definitions and reading tagged objects and…
 
-## Timestamps
+### Published properties
 
-- **Created:** 2026-03-27
-- **Modified:** 2026-03-27
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### AsyncAPI (1)
 
-### Metaplane
+Event-driven and webhook contracts.
 
-Metaplane is a data observability platform providing automated anomaly detection and data quality monitoring.
+- [Metaplane Webhooks](https://apis.io/asyncapis/metaplane/metaplane-webhooks/)
 
-- **Human URL:** [https://www.metaplane.dev](https://www.metaplane.dev)
+#### MCP servers (1)
 
-#### Tags
+Model Context Protocol servers that expose the API to agents.
 
-- AIOps
+- [metaplane-mcp.yml](https://apis.io/servers/metaplane/metaplane-mcp-yml/)
 
-#### Properties
+#### Agentic access (1)
 
-- [Documentation](https://docs.metaplane.dev)
-- [Postman Collection](collections/metaplane.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/metaplane.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Which operations an agent can call, which act, and which need a human in the loop.
 
-## Common Properties
+- [Metaplane Agentic Access](https://apis.io/agentic-access/metaplane/metaplane-agentic-access/)
 
-- [GitHub Organization](https://github.com/metaplane)
-- [LinkedIn](https://www.linkedin.com/company/metaplane)
+#### Collections (5)
+
+Postman and Open Collection request collections.
+
+- [Metaplane API](https://apis.io/collections/metaplane/open-metaplane/)
+- [Metaplane Connections API](https://apis.io/collections/metaplane/open-metaplane-connections-api/)
+- [Metaplane Connections Datapoints API](https://apis.io/collections/metaplane/open-metaplane-datapoints-api/)
+- [Metaplane Connections Monitors API](https://apis.io/collections/metaplane/open-metaplane-monitors-api/)
+- [Metaplane Connections Tags API](https://apis.io/collections/metaplane/open-metaplane-tags-api/)
+
+#### Overlays (3)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Metaplane Connections Overlay](https://apis.io/overlays/metaplane/metaplane-connections-overlay/)
+- [Metaplane Monitors Overlay](https://apis.io/overlays/metaplane/metaplane-monitors-overlay/)
+- [Metaplane Tags Overlay](https://apis.io/overlays/metaplane/metaplane-tags-overlay/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Metaplane Authentication](https://apis.io/security/metaplane/metaplane-authentication/)
+- [Metaplane Domain Security](https://apis.io/security/metaplane/metaplane-domain-security/)
+- [Metaplane Trust Center](https://apis.io/security/metaplane/metaplane-trust-center/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Metaplane Plans Pricing](https://apis.io/plans/metaplane/metaplane-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Metaplane Rate Limits](https://apis.io/rate-limits/metaplane/metaplane-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Metaplane Finops](https://apis.io/finops/metaplane/metaplane-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
 - [Website](https://www.metaplane.dev)
 - [Documentation](https://docs.metaplane.dev)
-- [Integrations](https://www.metaplane.dev/integrations)
-- [L L Ms Txt](https://docs.metaplane.dev/llms.txt)
+- [Getting started](https://docs.metaplane.dev/docs/setting-up-metaplane-for-the-first-time)
+- [API reference](https://docs.metaplane.dev/reference/getting-started)
+- [Pricing](https://www.metaplane.dev/pricing)
+- [Sign up](https://www.metaplane.dev/signup)
+- [Support](https://www.metaplane.dev/book-a-demo)
+- [Changelog](https://www.metaplane.dev/changelog)
+- [Blog](https://www.metaplane.dev/blog/rss.xml)
+- [Terms of service](https://www.metaplane.dev/legal/terms)
+- [Privacy policy](https://www.metaplane.dev/legal/privacy)
+- [GitHub](https://github.com/metaplane)
+- [Status](https://status.metaplane.dev)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 57.7** — strong · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 54.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 42.1 |
+| Developer ergonomics | 47.0 |
+| Access clarity | 92.1 |
+
+**Agent readiness 26.4** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 29.4** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/metaplane/](https://apis.io/providers/metaplane/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Metaplane: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/metaplane/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
