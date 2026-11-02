@@ -1,0 +1,69 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-28'
+method: searched
+source: https://www.metaplane.dev/pricing
+sources:
+- https://www.metaplane.dev/pricing
+provenance:
+  tool: engine/economics/harvest_pricing.py
+  run: 20261028T141238
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: usage-other
+delivery:
+  delivery: managed
+  method: page
+  read: '2026-10-28'
+  managed_tier: Pro
+published: true
+note: Only numeric price shown is $0 Free tier; Pro is usage-based per monitored table with no rate published;
+  Enterprise custom. Page mentions paying with existing Snowflake credits.
+plan_count: 3
+currency: USD
+plans:
+- name: Free
+  price_text: $0
+  price: 0
+  currency: USD
+  period: none
+  included_quota: 10 monitored tables, 4 users; 3 custom SQL monitors; email support
+- name: Pro
+  price_text: Usage-based
+  period: none
+  unit: per monitored table
+  included_quota: Pay per monitored table, 12 users, unlimited viewers; 100 monitored tables; 5 custom
+    SQL monitors
+- name: Enterprise
+  price_text: Contact sales
+  period: none
+  included_quota: Pay per monitored table, 12+ users, unlimited viewers; unlimited monitored tables; 10
+    custom SQL monitors; SSO
+x-canonical:
+  generated: '2026-11-01'
+  vocabulary: engine/economics/plans-canonical.yml
+  models:
+  - free
+  units: []
+  plans:
+  - name: Free
+    access: other
+    model: free
+    model_how: derived
+    units: []
+    periods:
+    - none
+  - name: Pro
+    access: other
+    model: unstated
+    model_how: derived
+    units:
+    - other
+    periods:
+    - none
+  - name: Enterprise
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods:
+    - none
