@@ -39,7 +39,7 @@ plans:
   included_quota: Pay per monitored table, 12+ users, unlimited viewers; unlimited monitored tables; 10
     custom SQL monitors; SSO
 x-canonical:
-  generated: '2026-11-02'
+  generated: '2026-11-06'
   vocabulary: engine/economics/plans-canonical.yml
   models:
   - free
