@@ -14,6 +14,12 @@ artifacts:
   capabilities/metaplane-capability-edges.yml:
     method: unknown
     evidence: no authorship recorded
+  certification/observations-2026-11-11.jsonl:
+    method: unknown
+    evidence: no authorship recorded
+  certification/status.yml:
+    method: unknown
+    evidence: no authorship recorded
   changelog/metaplane-changelog.yml:
     method: searched
     evidence: declared in the artifact
@@ -50,6 +56,9 @@ artifacts:
   collections/metaplane.postman_collection.json:
     method: derived
     evidence: openapi/metaplane
+  compliance/metaplane-compliance.yml:
+    method: harvested
+    evidence: declared in the artifact
   conformance/metaplane-conformance.yml:
     method: searched
     evidence: declared in the artifact
@@ -74,6 +83,9 @@ artifacts:
   heartbeat/2026-11-06.yml:
     method: unknown
     evidence: no authorship recorded
+  heartbeat/2026-11-13.yml:
+    method: unknown
+    evidence: no authorship recorded
   integrations/_index.yml:
     method: generated
     evidence: carries an API Evangelist house phrase
@@ -83,7 +95,7 @@ artifacts:
   kin/checks-2026-10-23T222754.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
-  kin/checks-2026-11-02T082323.yml:
+  kin/checks-2026-11-06T143934.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-09-23T000603.yml:
@@ -149,6 +161,9 @@ artifacts:
   kin/score-2026-11-02T082323.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-11-06T143934.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
   lifecycle/metaplane-lifecycle.yml:
     method: searched
     evidence: declared in the artifact
@@ -189,6 +204,9 @@ artifacts:
   plans/metaplane-plans-pricing.yml:
     method: searched
     evidence: declared in the artifact
+  privacy/metaplane-privacy-policy.yml:
+    method: harvested
+    evidence: declared in the artifact
   rate-limits/metaplane-rate-limits.yml:
     method: searched
     evidence: declared in the artifact
@@ -215,6 +233,9 @@ artifacts:
     evidence: declared in the artifact
   sla/metaplane-sla.yml:
     method: generated
+    evidence: declared in the artifact
+  terms/metaplane-terms-of-service.yml:
+    method: harvested
     evidence: declared in the artifact
   well-known/metaplane-well-known.yml:
     method: unknown
